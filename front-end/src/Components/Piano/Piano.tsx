@@ -5,18 +5,18 @@ const Piano: React.FC = () => {
   return (
     <div>
       <div className="piano">
-        <button className="r2"></button>
-        <button className="r3"></button>
-        <button className="r4"></button>
-        <button className="r5"></button>
-        <button className="r6"></button>
-        <button className="r7"></button>
-        <button className="r8"></button>
-        <button className="r9"></button>
-        <button className="r10"></button>
-        <button className="r11"></button>
-        <button className="r12"></button>
-        <button className="r13"></button>
+        <button className="c-note"></button>
+        <button className="cd-note"></button>
+        <button className="d-note"></button>
+        <button className="de-note"></button>
+        <button className="e-note"></button>
+        <button className="f-note"></button>
+        <button className="fg-note"></button>
+        <button className="g-note"></button>
+        <button className="ga-note"></button>
+        <button className="a-note"></button>
+        <button className="ab-note"></button>
+        <button className="b-note"></button>
       </div>
     </div>
   );

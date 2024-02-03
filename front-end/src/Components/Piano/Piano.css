@@ -1,12 +1,11 @@
 .piano {
   position: relative;
-  width: 490px;
-  height: 200px;
+  width: 440px;
+  height: 260px;
   user-select: none;
 }
 
-/* Rectangle 2 */
-.r2 {
+.c-note {
   box-sizing: border-box;
 
   position: absolute;
@@ -15,88 +14,27 @@
   top: 0%;
   bottom: 0%;
 
-  background: #121212;
-  border: 1px solid #ffffff;
+  background-color: #ffffff;
+  border: 1px solid #121212;
   border-radius: 5px;
 }
 
-/* Rectangle 6 */
-.r3 {
+.cd-note {
   box-sizing: border-box;
 
   position: absolute;
-  left: 57.14%;
-  right: 28.57%;
+  left: 10.2%;
+  right: 81.63%;
   top: 0%;
-  bottom: 0%;
-
-  background: #121212;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-}
-
-/* Rectangle 5 */
-.r4 {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 42.86%;
-  right: 42.86%;
-  top: 0%;
-  bottom: 0%;
-
-  background: #121212;
-  border: 1px solid #ffffff;
-  border-radius: 0px 5px 5px 5px;
-}
-
-/* Rectangle 7 */
-.r5 {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 85.71%;
-  right: 0%;
-  top: 0%;
-  bottom: 0%;
+  bottom: 40%;
+  z-index: 1;
 
   background: #121212;
   border: 1px solid #ffffff;
   border-radius: 5px;
 }
 
-/* Rectangle 8 */
-.r6 {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 71.43%;
-  right: 14.29%;
-  top: 0%;
-  bottom: 0%;
-
-  background: #121212;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-}
-
-/* Rectangle 4 */
-.r7 {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 28.57%;
-  right: 57.14%;
-  top: 0%;
-  bottom: 0%;
-
-  background: #121212;
-  border: 1px solid #ffffff;
-  border-radius: 5px 0px 5px 5px;
-}
-
-/* Rectangle 3 */
-.r8 {
+.d-note {
   box-sizing: border-box;
 
   position: absolute;
@@ -105,28 +43,12 @@
   top: 0%;
   bottom: 0%;
 
-  background: #121212;
-  border: 1px solid #ffffff;
+  background: #ffffff;
+  border: 1px solid #121212;
   border-radius: 5px;
 }
 
-/* Rectangle 9 */
-.r9 {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 10.2%;
-  right: 81.63%;
-  top: 0%;
-  bottom: 40%;
-
-  background: #121212;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-}
-
-/* Rectangle 10 */
-.r10 {
+.de-note {
   box-sizing: border-box;
 
   position: absolute;
@@ -134,44 +56,42 @@
   right: 67.35%;
   top: 0%;
   bottom: 40%;
+  z-index: 1;
 
   background: #121212;
   border: 1px solid #ffffff;
   border-radius: 5px;
 }
 
-/* Rectangle 13 */
-.r11 {
+.e-note {
   box-sizing: border-box;
 
   position: absolute;
-  left: 81.63%;
-  right: 10.2%;
+  left: 28.57%;
+  right: 57.14%;
   top: 0%;
-  bottom: 40%;
+  bottom: 0%;
 
-  background: #121212;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
+  background: #ffffff;
+  border: 1px solid #121212;
+  border-radius: 5px 0px 5px 5px;
 }
 
-/* Rectangle 12 */
-.r12 {
+.f-note {
   box-sizing: border-box;
 
   position: absolute;
-  left: 67.35%;
-  right: 24.49%;
+  left: 42.86%;
+  right: 42.86%;
   top: 0%;
-  bottom: 40%;
+  bottom: 0%;
 
-  background: #121212;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
+  background: #ffffff;
+  border: 1px solid #121212;
+  border-radius: 0px 5px 5px 5px;
 }
 
-/* Rectangle 11 */
-.r13 {
+.fg-note {
   box-sizing: border-box;
 
   position: absolute;
@@ -179,8 +99,81 @@
   right: 38.78%;
   top: 0%;
   bottom: 40%;
+  z-index: 1;
 
   background: #121212;
   border: 1px solid #ffffff;
+  border-radius: 5px;
+}
+
+.g-note {
+  box-sizing: border-box;
+
+  position: absolute;
+  left: 57.14%;
+  right: 28.57%;
+  top: 0%;
+  bottom: 0%;
+
+  background: #ffffff;
+  border: 1px solid #121212;
+  border-radius: 5px;
+}
+
+.ga-note {
+  box-sizing: border-box;
+
+  position: absolute;
+  left: 67.35%;
+  right: 24.49%;
+  top: 0%;
+  bottom: 40%;
+  z-index: 1;
+
+  background: #121212;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+}
+
+.a-note {
+  box-sizing: border-box;
+
+  position: absolute;
+  left: 71.43%;
+  right: 14.29%;
+  top: 0%;
+  bottom: 0%;
+
+  background: #ffffff;
+  border: 1px solid #121212;
+  border-radius: 5px;
+}
+
+.ab-note {
+  box-sizing: border-box;
+
+  position: absolute;
+  left: 81.63%;
+  right: 10.2%;
+  top: 0%;
+  bottom: 40%;
+  z-index: 1;
+
+  background: #121212;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+}
+
+.b-note {
+  box-sizing: border-box;
+
+  position: absolute;
+  left: 85.71%;
+  right: 0%;
+  top: 0%;
+  bottom: 0%;
+
+  background: #ffffff;
+  border: 1px solid #121212;
   border-radius: 5px;
 }
