@@ -31,7 +31,7 @@ declare namespace PianoTypes {
 
   type TimeSignature = "4/4"; //more to be added later on
 
-  interface PianoSettings {
+  interface SheetSettings {
     showFlats: boolean;
     showSharps: boolean;
     clef: Clef;
