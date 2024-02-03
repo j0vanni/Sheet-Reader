@@ -1,221 +1,43 @@
-.piano {
+.piano-container {
   position: relative;
   width: 440px;
-  height: 260px;
+  height: 280px;
   user-select: none;
 }
 
-.c-note:hover,
-.d-note:hover,
-.e-note:hover,
-.f-note:hover,
-.g-note:hover,
-.a-note:hover,
-.b-note:hover {
-  background-color: #eeeeee;
-  border-color: #ffffff;
+.white-keys-container {
+  display: flex;
+  position: relative;
+  height: 100%;
 }
 
-.cd-note:hover,
-.de-note:hover,
-.fg-note:hover,
-.ga-note:hover,
-.ab-note:hover {
-  border-color: #121212;
-}
-
-/* Add :focus pseudo-class to style the button when focused */
-.c-note:focus,
-.d-note:focus,
-.e-note:focus,
-.f-note:focus,
-.g-note:focus,
-.a-note:focus,
-.b-note:focus {
-  outline: none;
-  box-shadow: none;
-  border-color: #121212;
-}
-
-.cd-note:focus,
-.de-note:focus,
-.fg-note:focus,
-.ga-note:focus,
-.ab-note:focus {
-  outline: none;
-  box-shadow: none;
-  border-color: #ffffff;
-}
-
-.c-note {
-  box-sizing: border-box;
-
+.black-keys-container {
   position: absolute;
-  left: 0%;
-  right: 85.71%;
-  top: 0%;
-  bottom: 0%;
+  top: 0;
+  width: 100%;
+  height: 60%;
+  display: flex;
+  padding: 0 24px;
+}
 
+.white-key {
   background-color: #ffffff;
   border: 1px solid #121212;
   border-radius: 5px;
+  flex: 1;
+  z-index: 1;
 }
 
-.cd-note {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 10.2%;
-  right: 81.63%;
-  top: 0%;
-  bottom: 40%;
-  z-index: 1;
-
-  background: #121212;
+.black-key {
+  background-color: #121212;
   border: 1px solid #ffffff;
   border-radius: 5px;
+  z-index: 2;
+  width: 10%;
+  height: 100%;
+  margin-left: 4%;
 }
 
-.d-note {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 14.29%;
-  right: 71.43%;
-  top: 0%;
-  bottom: 0%;
-
-  background: #ffffff;
-  border: 1px solid #121212;
-  border-radius: 5px;
-}
-
-.de-note {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 24.49%;
-  right: 67.35%;
-  top: 0%;
-  bottom: 40%;
-  z-index: 1;
-
-  background: #121212;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-}
-
-.e-note {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 28.57%;
-  right: 57.14%;
-  top: 0%;
-  bottom: 0%;
-
-  background: #ffffff;
-  border: 1px solid #121212;
-  border-radius: 5px 0px 5px 5px;
-}
-
-.f-note {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 42.86%;
-  right: 42.86%;
-  top: 0%;
-  bottom: 0%;
-
-  background: #ffffff;
-  border: 1px solid #121212;
-  border-radius: 0px 5px 5px 5px;
-}
-
-.fg-note {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 53.06%;
-  right: 38.78%;
-  top: 0%;
-  bottom: 40%;
-  z-index: 1;
-
-  background: #121212;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-}
-
-.g-note {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 57.14%;
-  right: 28.57%;
-  top: 0%;
-  bottom: 0%;
-
-  background: #ffffff;
-  border: 1px solid #121212;
-  border-radius: 5px;
-}
-
-.ga-note {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 67.35%;
-  right: 24.49%;
-  top: 0%;
-  bottom: 40%;
-  z-index: 1;
-
-  background: #121212;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-}
-
-.a-note {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 71.43%;
-  right: 14.29%;
-  top: 0%;
-  bottom: 0%;
-
-  background: #ffffff;
-  border: 1px solid #121212;
-  border-radius: 5px;
-}
-
-.ab-note {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 81.63%;
-  right: 10.2%;
-  top: 0%;
-  bottom: 40%;
-  z-index: 1;
-
-  background: #121212;
-  border: 1px solid #ffffff;
-  border-radius: 5px;
-}
-
-.b-note {
-  box-sizing: border-box;
-
-  position: absolute;
-  left: 85.71%;
-  right: 0%;
-  top: 0%;
-  bottom: 0%;
-
-  background: #ffffff;
-  border: 1px solid #121212;
-  border-radius: 5px;
+.black-key:nth-child(2) {
+  margin-right: 15%;
 }
