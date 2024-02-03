@@ -5,6 +5,48 @@
   user-select: none;
 }
 
+.c-note:hover,
+.d-note:hover,
+.e-note:hover,
+.f-note:hover,
+.g-note:hover,
+.a-note:hover,
+.b-note:hover {
+  background-color: #eeeeee;
+  border-color: #ffffff;
+}
+
+.cd-note:hover,
+.de-note:hover,
+.fg-note:hover,
+.ga-note:hover,
+.ab-note:hover {
+  border-color: #121212;
+}
+
+/* Add :focus pseudo-class to style the button when focused */
+.c-note:focus,
+.d-note:focus,
+.e-note:focus,
+.f-note:focus,
+.g-note:focus,
+.a-note:focus,
+.b-note:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: #121212;
+}
+
+.cd-note:focus,
+.de-note:focus,
+.fg-note:focus,
+.ga-note:focus,
+.ab-note:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: #ffffff;
+}
+
 .c-note {
   box-sizing: border-box;
 
