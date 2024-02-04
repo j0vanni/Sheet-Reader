@@ -28,6 +28,17 @@
   z-index: 1;
 }
 
+.white-key:hover {
+  background-color: #eeeeee;
+  border-color: #ffffff;
+}
+
+.white-key:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: #121212;
+}
+
 .black-key {
   background-color: #121212;
   border: 1px solid #ffffff;
@@ -36,6 +47,16 @@
   width: 10%;
   height: 100%;
   margin-left: 4%;
+}
+
+.black-key:hover {
+  border-color: #121212;
+}
+
+.black-key:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: #ffffff;
 }
 
 .black-key:nth-child(2) {
