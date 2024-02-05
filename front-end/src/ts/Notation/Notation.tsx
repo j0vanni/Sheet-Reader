@@ -1,5 +1,5 @@
 import react from "react";
-import abcjs, { AbcVisualParams, ClickListener } from "abcjs";
+import abcjs, { AbcVisualParams } from "abcjs";
 import { NotationProps } from "./NotationTypes";
 
 const Notation: react.FC<NotationProps> = ({ notation, renderOptions }) => {
