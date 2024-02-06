@@ -18,7 +18,3 @@ export interface PianoKey {
   whiteKey?: boolean;
   blackKey?: boolean;
 }
-
-export interface PianoProps {
-  keys: PianoKey[];
-}

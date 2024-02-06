@@ -17,6 +17,7 @@ const keys: PianoKey[] = [
   { note: Note.B4, whiteKey: true },
 ];
 
+
 const Piano: React.FC = () => {
   const whiteKeys = keys.map((key, index) =>
     key.whiteKey ? (
