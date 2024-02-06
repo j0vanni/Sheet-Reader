@@ -49,5 +49,10 @@ export interface RenderOptions {
   viewportHorizontal?: boolean;
   viewportVertical?: boolean;
   visualTranspose?: number;
-  wrap?: any;
+  wrap?: {
+    preferredMeasuresPerLine?: number;
+    minSpacing?: number;
+    lastLineLimit?: boolean;
+    minSpacingLimit?: number;
+  };
 }
