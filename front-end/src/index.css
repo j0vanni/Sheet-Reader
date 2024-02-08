@@ -34,6 +34,10 @@ h1 {
   line-height: 1.1;
 }
 
+button:focus {
+  outline: none;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     color: white;
