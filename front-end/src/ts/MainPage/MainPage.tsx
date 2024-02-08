@@ -2,10 +2,14 @@ import React from "react";
 import "./MainPage.css";
 import SheetMusic from "../SheetMusic/SheetMusic";
 import Piano from "../Piano/Piano";
+import Options from "../Options/Options";
 
 const MainPage: React.FC = () => {
   return (
     <div className="container">
+      <div className="options-container">
+        <Options />
+      </div>
       <div className="sm-container">
         <SheetMusic
           settings={{

@@ -5,8 +5,11 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  position: absolute;
 }
 
 .sm-container {
+  margin-bottom: 4rem;
+  margin-top: 2rem;
   justify-content: center;
 }
