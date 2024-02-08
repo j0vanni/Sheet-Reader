@@ -19,7 +19,6 @@ const keys: PianoKey[] = [
 
 const Piano: React.FC = () => {
   const [isRotated, setIsRotated] = useState(false);
-  const [rotDeg, setRotDeg] = useState(0);
 
   const handleReset = () => {
     setIsRotated(true);
@@ -56,7 +55,7 @@ const Piano: React.FC = () => {
           style={
             isRotated
               ? {
-                  transform: `rotate(${rotDeg + 360}deg)`,
+                  transform: `rotate(${360}deg)`,
                   transition: "all 1s ease",
                 }
               : undefined
