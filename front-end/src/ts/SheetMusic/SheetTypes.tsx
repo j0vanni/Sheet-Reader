@@ -38,7 +38,7 @@ declare namespace SheetTypes {
     clef: Clef;
     scale: ScaleType;
     timeSignature: TimeSignature;
-    notation: string;
+    notation: string[];
     renderOptions?: RenderOptions;
   }
 }
