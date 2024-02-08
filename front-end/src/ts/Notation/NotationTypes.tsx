@@ -42,7 +42,7 @@ export interface RenderOptions {
   selectionColor?: string;
   selectTypes?: any;
   showDebug?: any;
-  staffWidth?: number;
+  staffwidth?: number;
   startingTune?: number;
   textboxpadding?: number;
   tablatures?: any;
