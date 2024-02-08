@@ -43,7 +43,7 @@ const MainPage: React.FC = () => {
           }}
         />
       </div>
-      <div className="piano-container">
+      <div className="piano-container" tabIndex={1}>
         <Piano />
       </div>
     </div>
