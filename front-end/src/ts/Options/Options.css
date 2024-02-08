@@ -1,5 +1,5 @@
 .op-container {
-  background-color: #191919;
+  background-color: #202020;
   width: 30rem;
   border-radius: 5px;
   height: 2rem;
@@ -19,7 +19,7 @@
 .op-container button {
   font-size: 0.6rem;
   height: 2rem;
-  background-color: #191919;
+  background-color: #202020;
   border: none;
   text-shadow: 0 0 0 transparent;
   color: #808080;
