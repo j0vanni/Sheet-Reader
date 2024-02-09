@@ -1,8 +1,8 @@
 .op-container {
   background-color: #202020;
-  width: 30rem;
+  width: 36rem;
   border-radius: 5px;
-  height: 2rem;
+  height: 3rem;
   display: flex;
   justify-content: space-around;
   user-select: none;
@@ -11,14 +11,14 @@
 
 .op-container #divide {
   background-color: white;
-  height: 1rem;
+  height: 2rem;
   width: 1px;
   position: relative;
 }
 
 .op-container button {
-  font-size: 0.6rem;
-  height: 2rem;
+  font-size: 70%;
+  height: 3rem;
   background-color: #202020;
   border: none;
   text-shadow: 0 0 0 transparent;
@@ -39,4 +39,15 @@
   transition: all 0.3s ease;
   text-shadow: 0 0 0 transparent;
   color: #808080;
+}
+
+@media screen and (max-width: 600px) {
+  .op-container {
+    width: 80%;
+  }
+
+  .op-container button {
+    width: 2rem;
+    height: 2rem;
+  }
 }
