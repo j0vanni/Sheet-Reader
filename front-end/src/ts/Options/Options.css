@@ -31,7 +31,7 @@
 
 .op-container .selected {
   transition: all 0.3s ease;
-  text-shadow: 0 0 10px white;
+  text-shadow: 0 0 2px white;
   color: white;
 }
 
