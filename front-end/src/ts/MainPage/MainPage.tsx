@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./MainPage.css";
 import SheetMusic from "../SheetMusic/SheetMusic";
 import Piano from "../Piano/Piano";
 import Options from "../Options/Options";
 
 const MainPage: React.FC = () => {
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setScreenWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
     <div className="container">
       <div className="options-container">
@@ -22,8 +36,7 @@ const MainPage: React.FC = () => {
               paddingbottom: 1,
               paddingright: 1,
               paddingleft: 1,
-              expandToWidest: true,
-              staffwidth: 600,
+              staffwidth: screenWidth > 840 ? 800 : screenWidth - 100,
             },
           }}
         />
@@ -38,7 +51,7 @@ const MainPage: React.FC = () => {
               paddingtop: 1,
               paddingright: 1,
               paddingleft: 1,
-              staffwidth: 600,
+              staffwidth: screenWidth > 840 ? 800 : screenWidth - 100,
             },
           }}
         />
