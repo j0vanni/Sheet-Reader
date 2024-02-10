@@ -1,20 +1,25 @@
 export enum Note {
-  C4 = "C4",
-  D4 = "D4",
-  E4 = "E4",
-  F4 = "F4",
-  G4 = "G4",
-  A4 = "A4",
-  B4 = "B4",
-  CD4 = "CD4",
-  DE4 = "DE4",
-  FG4 = "FG4",
-  GA4 = "GA4",
-  AB4 = "AB4",
+  C5 = "C5",
+  D5 = "D5",
+  E5 = "E5",
+  F5 = "F5",
+  G5 = "G5",
+  A5 = "A5",
+  B5 = "B5",
+  CD5 = "CD5",
+  DE5 = "DE5",
+  FG5 = "FG5",
+  GA5 = "GA5",
+  AB5 = "AB5",
 }
 
 export interface PianoKey {
   note: Note;
   whiteKey?: boolean;
   blackKey?: boolean;
+}
+
+export interface PianoProps {
+  onKeyPress: (note: Note) => void;
+  onResetPress: () => void;
 }
