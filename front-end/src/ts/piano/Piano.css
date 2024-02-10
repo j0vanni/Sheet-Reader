@@ -1,5 +1,5 @@
 .piano-container {
-  position: relative;
+  position: absolute;
   width: 400px;
   height: 16rem;
   user-select: none;
