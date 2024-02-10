@@ -7,7 +7,7 @@ interface SheetMusicProps {
 }
 
 const SheetMusic: React.FC<SheetMusicProps> = ({ settings }) => {
-  let notationtoString = settings.notation.toString();
+  let notationtoString = settings.notation.join("");
   let notation = `K:${settings.scale} clef=${settings.clef}\n${notationtoString}`;
 
   return (
