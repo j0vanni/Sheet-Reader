@@ -1,14 +1,35 @@
 import React from "react";
 import "./Options.css";
 
-const Options: React.FC = () => {
-  const [treble, setTreble] = React.useState(true);
-  const [bass, setBass] = React.useState(true);
-  const [sharps, setSharps] = React.useState(false);
-  const [flats, setFlats] = React.useState(false);
-  const [seconds, setSeconds] = React.useState(30);
-  const [tempo, setTempo] = React.useState(false);
+type OptionsProps = {
+  treble: boolean;
+  setTreble: (value: boolean) => void;
+  bass: boolean;
+  setBass: (value: boolean) => void;
+  sharps: boolean;
+  setSharps: (value: boolean) => void;
+  flats: boolean;
+  setFlats: (value: boolean) => void;
+  seconds: number;
+  setSeconds: (value: number) => void;
+  tempo: boolean;
+  setTempo: (value: boolean) => void;
+};
 
+const Options: React.FC<OptionsProps> = ({
+  treble,
+  setTreble,
+  bass,
+  setBass,
+  sharps,
+  setSharps,
+  flats,
+  setFlats,
+  seconds,
+  setSeconds,
+  tempo,
+  setTempo,
+}) => {
   return (
     <div className="op-container" tabIndex={-1}>
       <div>
