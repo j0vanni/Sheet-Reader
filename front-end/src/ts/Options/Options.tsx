@@ -14,6 +14,8 @@ type OptionsProps = {
   setSeconds: (value: number) => void;
   tempo: boolean;
   setTempo: (value: boolean) => void;
+  twoHands: boolean;
+  setTwoHands: (value: boolean) => void;
 };
 
 const Options: React.FC<OptionsProps> = ({
@@ -29,6 +31,8 @@ const Options: React.FC<OptionsProps> = ({
   setSeconds,
   tempo,
   setTempo,
+  twoHands,
+  setTwoHands,
 }) => {
   return (
     <div className="op-container" tabIndex={-1}>
@@ -66,6 +70,9 @@ const Options: React.FC<OptionsProps> = ({
       </div>
       <p id="divide"></p>
       <div>
+        <button onClick={() => setTwoHands(!twoHands)} tabIndex={-1}>
+          <p className={twoHands ? "selected" : "unselected"}>Two Hands</p>
+        </button>
         <button onClick={() => setTempo(!tempo)} tabIndex={-1}>
           <p className={tempo ? "selected" : "unselected"}>Match Tempo</p>
         </button>
