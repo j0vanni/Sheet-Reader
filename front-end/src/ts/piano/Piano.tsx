@@ -61,9 +61,11 @@ const Piano: React.FC<PianoProps> = ({ onKeyPress, onResetPress }) => {
             isRotated
               ? {
                   transform: `rotate(${360}deg)`,
-                  transition: "all 1s ease",
+                  transition: "all .5s ease",
                 }
-              : undefined
+              : {
+                  transform: `rotate(${0}deg)`,
+                }
           }
           tabIndex={1}
         >
