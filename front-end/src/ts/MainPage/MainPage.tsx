@@ -14,20 +14,59 @@ const MainPage: React.FC = () => {
   const [flats, setFlats] = useState(false);
   const [seconds, setSeconds] = useState(30);
   const [tempo, setTempo] = useState(false);
+  const [twoHands, setTwoHands] = useState(false);
   const flatsharpPercentage = 0.2;
   const noteGenerationLength = 12;
   const lineBreakLength = 4;
+  const [userStart, setUserStart] = useState(false);
+  const [currNote, setCurrNote] = useState(0);
 
-  const [trebleNotation, setTrebleNotation] = useState(["c,2"]);
-  const [bassNotation, setBassNotation] = useState(["c,,,2"]);
+  const [trebleNotation, setTrebleNotation] = useState([""]);
+  const [bassNotation, setBassNotation] = useState([""]);
 
   const handlePianoKeyPress = (note: Note) => {
-    console.log(note);
+    if (userStart === false) {
+      setUserStart(true);
+    }
   };
 
   const handleResetPress = () => {
-    generateTrebleNotation(noteGenerationLength, sharps, flats);
-    generateBassNotation(noteGenerationLength, sharps, flats);
+    generateNotes();
+  };
+
+  const twoHandedNotes = (length: number, sharps: boolean, flats: boolean) => {
+    let arr = [];
+    for (let i = 0; i < length; i++) {
+      if (Math.random() < 0.5) {
+        arr.push("treble");
+      } else {
+        arr.push("bass");
+      }
+    }
+    let trebleNotation = [];
+    let bassNotation = [];
+
+    for (let i = 0; i < length; i++) {
+      if (i % lineBreakLength === 0) {
+        trebleNotation.push("|");
+        bassNotation.push("|");
+      }
+      if (arr[i] === "treble") {
+        const randomNote = selectWeightedNote(trebleNoteUsage).note;
+        trebleNotation.push(
+          noteToNotation(randomNote, sharpsOrFlats(sharps, flats))
+        );
+        bassNotation.push("x2");
+      } else {
+        const randomNote = selectWeightedNote(bassNoteUsage).note;
+        bassNotation.push(
+          noteToNotation(randomNote, sharpsOrFlats(sharps, flats))
+        );
+        trebleNotation.push("x2");
+      }
+    }
+
+    return [trebleNotation, bassNotation];
   };
 
   const noteToNotation = (note: string, sf: string) => {
@@ -81,6 +120,23 @@ const MainPage: React.FC = () => {
     return noteUsageArray[noteUsageArray.length - 1];
   };
 
+  const generateNotes = () => {
+    if (twoHands) {
+      setTrebleNotation(
+        generateTrebleNotation(noteGenerationLength, sharps, flats)
+      );
+      setBassNotation(
+        generateBassNotation(noteGenerationLength, sharps, flats)
+      );
+    } else {
+      const notation = twoHandedNotes(noteGenerationLength, sharps, flats);
+      if (notation) {
+        setTrebleNotation(notation[0]);
+        setBassNotation(notation[1]);
+      }
+    }
+  };
+
   const generateTrebleNotation = (
     length: number,
     sharps: boolean,
@@ -94,7 +150,7 @@ const MainPage: React.FC = () => {
       const randomNote = selectWeightedNote(trebleNoteUsage).note;
       notation.push(noteToNotation(randomNote, sharpsOrFlats(sharps, flats)));
     }
-    setTrebleNotation(notation);
+    return notation;
   };
 
   const generateBassNotation = (
@@ -102,7 +158,7 @@ const MainPage: React.FC = () => {
     sharps: boolean,
     flats: boolean
   ) => {
-    let notation = [];
+    let notation: string[] = [];
     for (let i = 0; i < length; i++) {
       if (i % lineBreakLength === 0) {
         notation.push("|");
@@ -111,11 +167,21 @@ const MainPage: React.FC = () => {
 
       notation.push(noteToNotation(randomNote, sharpsOrFlats(sharps, flats)));
     }
-    console.log(notation);
-    setBassNotation(notation);
+    return notation;
   };
 
   useEffect(() => {
+    if (treble && trebleNotation.length === 1 && twoHands) {
+      generateTrebleNotation(noteGenerationLength, sharps, flats);
+    }
+    if (bass && bassNotation.length === 1 && twoHands) {
+      generateBassNotation(noteGenerationLength, sharps, flats);
+    }
+
+    if (!twoHands && trebleNotation.length === 1 && bassNotation.length === 1) {
+      generateNotes();
+    }
+
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
     };
@@ -125,7 +191,7 @@ const MainPage: React.FC = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [trebleNotation, bassNotation]);
+  }, [trebleNotation, bassNotation, twoHands]);
 
   return (
     <div className="container">
@@ -143,6 +209,8 @@ const MainPage: React.FC = () => {
           setSeconds={setSeconds}
           tempo={tempo}
           setTempo={setTempo}
+          twoHands={twoHands}
+          setTwoHands={setTwoHands}
         />
       </div>
       <div className="sm-container">
