@@ -36,7 +36,7 @@ const Options: React.FC<OptionsProps> = ({
 }) => {
   return (
     <div className="op-container" tabIndex={-1}>
-      <div>
+      <div className="note-options-container">
         <button onClick={() => setTreble(!treble)} tabIndex={-1}>
           <p className={treble ? "selected" : "unselected"}>Treble</p>
         </button>
@@ -51,7 +51,7 @@ const Options: React.FC<OptionsProps> = ({
         </button>
       </div>
       <p id="divide"></p>
-      <div>
+      <div className="seconds-options-container">
         <button onClick={() => setSeconds(15)} tabIndex={-1}>
           <p className={seconds === 15 ? "selected" : "unselected"}>
             15 seconds
@@ -69,7 +69,7 @@ const Options: React.FC<OptionsProps> = ({
         </button>
       </div>
       <p id="divide"></p>
-      <div>
+      <div className="extra-options-container">
         <button onClick={() => setTwoHands(!twoHands)} tabIndex={-1}>
           <p className={twoHands ? "selected" : "unselected"}>Two Hands</p>
         </button>
