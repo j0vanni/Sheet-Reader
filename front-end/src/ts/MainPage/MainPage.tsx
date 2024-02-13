@@ -4,7 +4,12 @@ import SheetMusic from "../SheetMusic/SheetMusic";
 import Piano from "../piano/Piano";
 import Options from "../Options/Options";
 import { Note } from "../piano/PianoTypes";
-import { bassNoteUsage, trebleNoteUsage } from "./NoteUsage";
+import { bassNoteUsage, trebleNoteUsage } from "../Utils/NoteUsage";
+import {
+  generateNotes,
+  generateTrebleNotation,
+  generateBassNotation,
+} from "../Utils/noteGenerationUtils";
 
 const MainPage: React.FC = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -31,155 +36,53 @@ const MainPage: React.FC = () => {
   };
 
   const handleResetPress = () => {
-    generateNotes();
-  };
-
-  const twoHandedNotes = (length: number, sharps: boolean, flats: boolean) => {
-    let arr = [];
-    for (let i = 0; i < length; i++) {
-      if (Math.random() < 0.5) {
-        arr.push("treble");
-      } else {
-        arr.push("bass");
-      }
-    }
-    let trebleNotation = [];
-    let bassNotation = [];
-
-    for (let i = 0; i < length; i++) {
-      if (i % lineBreakLength === 0) {
-        trebleNotation.push("|");
-        bassNotation.push("|");
-      }
-      if (arr[i] === "treble") {
-        const randomNote = selectWeightedNote(trebleNoteUsage).note;
-        trebleNotation.push(
-          noteToNotation(randomNote, sharpsOrFlats(sharps, flats))
-        );
-        bassNotation.push("x2");
-      } else {
-        const randomNote = selectWeightedNote(bassNoteUsage).note;
-        bassNotation.push(
-          noteToNotation(randomNote, sharpsOrFlats(sharps, flats))
-        );
-        trebleNotation.push("x2");
-      }
-    }
-
-    return [trebleNotation, bassNotation];
-  };
-
-  const noteToNotation = (note: string, sf: string) => {
-    let newNote = "";
-    if (sf !== "") {
-      newNote = sf + note.substring(0, 1);
-    } else {
-      newNote = note.substring(0, 1);
-    }
-    const octave = Number(note.substring(1, 2));
-
-    if (octave < 4) {
-      newNote += ",".repeat(4 - octave);
-    } else if (octave > 4) {
-      newNote += "'".repeat(octave - 4);
-    }
-    newNote += "2";
-    return newNote;
-  };
-
-  const sharpsOrFlats = (sharps: boolean, flats: boolean) => {
-    let sf = "";
-    if (sharps) {
-      if (Math.random() < flatsharpPercentage) {
-        sf += "^";
-      }
-    }
-    if (flats && sf === "") {
-      if (Math.random() < flatsharpPercentage) {
-        sf += "_";
-      }
-    }
-
-    return sf;
-  };
-
-  const selectWeightedNote = (noteUsageArray: Array<any>) => {
-    const totalWeight = noteUsageArray.reduce(
-      (acc, { percentage }) => acc + percentage,
-      0
+    generateNotes(
+      noteGenerationLength,
+      sharps,
+      flats,
+      lineBreakLength,
+      twoHands,
+      flatsharpPercentage
     );
-    const randomNum = Math.random() * totalWeight;
-
-    let weightSum = 0;
-    for (const noteUsage of noteUsageArray) {
-      weightSum += noteUsage.percentage;
-      if (randomNum <= weightSum) {
-        return noteUsage;
-      }
-    }
-    return noteUsageArray[noteUsageArray.length - 1];
-  };
-
-  const generateNotes = () => {
-    if (twoHands) {
-      setTrebleNotation(
-        generateTrebleNotation(noteGenerationLength, sharps, flats)
-      );
-      setBassNotation(
-        generateBassNotation(noteGenerationLength, sharps, flats)
-      );
-    } else {
-      const notation = twoHandedNotes(noteGenerationLength, sharps, flats);
-      if (notation) {
-        setTrebleNotation(notation[0]);
-        setBassNotation(notation[1]);
-      }
-    }
-  };
-
-  const generateTrebleNotation = (
-    length: number,
-    sharps: boolean,
-    flats: boolean
-  ) => {
-    let notation = [];
-    for (let i = 0; i < length; i++) {
-      if (i % lineBreakLength === 0) {
-        notation.push("|");
-      }
-      const randomNote = selectWeightedNote(trebleNoteUsage).note;
-      notation.push(noteToNotation(randomNote, sharpsOrFlats(sharps, flats)));
-    }
-    return notation;
-  };
-
-  const generateBassNotation = (
-    length: number,
-    sharps: boolean,
-    flats: boolean
-  ) => {
-    let notation: string[] = [];
-    for (let i = 0; i < length; i++) {
-      if (i % lineBreakLength === 0) {
-        notation.push("|");
-      }
-      const randomNote = selectWeightedNote(bassNoteUsage).note;
-
-      notation.push(noteToNotation(randomNote, sharpsOrFlats(sharps, flats)));
-    }
-    return notation;
   };
 
   useEffect(() => {
     if (treble && trebleNotation.length === 1 && twoHands) {
-      generateTrebleNotation(noteGenerationLength, sharps, flats);
+      setTrebleNotation(
+        generateTrebleNotation(
+          noteGenerationLength,
+          sharps,
+          flats,
+          lineBreakLength,
+          flatsharpPercentage
+        )
+      );
     }
     if (bass && bassNotation.length === 1 && twoHands) {
-      generateBassNotation(noteGenerationLength, sharps, flats);
+      setBassNotation(
+        generateBassNotation(
+          noteGenerationLength,
+          sharps,
+          flats,
+          lineBreakLength,
+          flatsharpPercentage
+        )
+      );
     }
 
     if (!twoHands && trebleNotation.length === 1 && bassNotation.length === 1) {
-      generateNotes();
+      const notations = generateNotes(
+        noteGenerationLength,
+        sharps,
+        flats,
+        lineBreakLength,
+        twoHands,
+        flatsharpPercentage
+      );
+      if (notations) {
+        setTrebleNotation(notations[0]);
+        setBassNotation(notations[1]);
+      }
     }
 
     const handleResize = () => {
