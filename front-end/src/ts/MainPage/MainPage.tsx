@@ -36,7 +36,7 @@ const MainPage: React.FC = () => {
   };
 
   const handleResetPress = () => {
-    generateNotes(
+    const notations = generateNotes(
       noteGenerationLength,
       sharps,
       flats,
@@ -44,6 +44,10 @@ const MainPage: React.FC = () => {
       twoHands,
       flatsharpPercentage
     );
+    if (notations) {
+      setTrebleNotation(notations[0]);
+      setBassNotation(notations[1]);
+    }
   };
 
   useEffect(() => {
