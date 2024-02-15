@@ -4,7 +4,6 @@ import SheetMusic from "../SheetMusic/SheetMusic";
 import Piano from "../piano/Piano";
 import Options from "../Options/Options";
 import { Note } from "../piano/PianoTypes";
-import { bassNoteUsage, trebleNoteUsage } from "../Utils/NoteUsage";
 import {
   generateNotes,
   generateTrebleNotation,
@@ -123,6 +122,7 @@ const MainPage: React.FC = () => {
       <div className="sm-container">
         <SheetMusic
           settings={{
+            currentNote: currNote,
             timeSignature: "4/4",
             scale: "CMajor",
             clef: "treble",
@@ -133,11 +133,13 @@ const MainPage: React.FC = () => {
               paddingright: 1,
               paddingleft: 1,
               staffwidth: screenWidth > 840 ? 800 : screenWidth - 100,
+              selectTypes: [],
             },
           }}
         />
         <SheetMusic
           settings={{
+            currentNote: currNote,
             timeSignature: "4/4",
             scale: "CMajor",
             clef: "bass",
@@ -148,6 +150,7 @@ const MainPage: React.FC = () => {
               paddingright: 1,
               paddingleft: 1,
               staffwidth: screenWidth > 840 ? 800 : screenWidth - 100,
+              selectTypes: [],
             },
           }}
         />
