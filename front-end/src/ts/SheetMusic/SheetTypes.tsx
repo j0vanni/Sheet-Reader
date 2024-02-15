@@ -40,6 +40,7 @@ declare namespace SheetTypes {
     timeSignature: TimeSignature;
     notation: string[];
     renderOptions?: RenderOptions;
+    currentNote: number;
   }
 }
 
