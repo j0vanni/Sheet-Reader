@@ -17,6 +17,7 @@ export interface PianoKey {
   note: Note;
   whiteKey?: boolean;
   blackKey?: boolean;
+  isNatural?: boolean;
 }
 
 export interface PianoProps {
