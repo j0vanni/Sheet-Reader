@@ -5,10 +5,11 @@ export const generateNotes = (
   sharps: boolean,
   flats: boolean,
   linebreak: number,
-  twoHands: boolean,
-  percentage: number
+  sameLine: boolean,
+  percentage: number,
+  specific?: string
 ) => {
-  if (twoHands) {
+  if (sameLine) {
     const trebleNotation = generateTrebleNotation(
       length,
       sharps,
@@ -31,7 +32,8 @@ export const generateNotes = (
       sharps,
       flats,
       linebreak,
-      percentage
+      percentage,
+      specific
     );
     if (notation) {
       //notation[0] = treble, notation[1] = bass
@@ -86,14 +88,19 @@ const twoHandedNotes = (
   sharps: boolean,
   flats: boolean,
   linebreak: number,
-  percentage: number
+  percentage: number,
+  specific?: string
 ) => {
   let arr = [];
   for (let i = 0; i < length; i++) {
-    if (Math.random() < 0.5) {
-      arr.push("treble");
+    if (specific !== undefined) {
+      arr.push(specific);
     } else {
-      arr.push("bass");
+      if (Math.random() < 0.5) {
+        arr.push("treble");
+      } else {
+        arr.push("bass");
+      }
     }
   }
   let trebleNotation = [];
