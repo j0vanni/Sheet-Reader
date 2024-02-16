@@ -27,6 +27,8 @@ const MainPage: React.FC = () => {
 
   const [trebleNotation, setTrebleNotation] = useState([""]);
   const [bassNotation, setBassNotation] = useState([""]);
+  const [filteredTrebleNotation, setFilteredTrebleNotation] = useState([""]);
+  const [filteredBassNotation, setFilteredBassNotation] = useState([""]);
 
   const generateNotationsForClef = (clef: string) => {
     return generateNotes(
@@ -92,20 +94,19 @@ const MainPage: React.FC = () => {
 
     if (newTrebleNotation !== trebleNotation) {
       setTrebleNotation(newTrebleNotation);
+      setFilteredTrebleNotation(
+        newTrebleNotation.filter((notation) => notation !== "|")
+      );
     }
     if (newBassNotation !== bassNotation) {
       setBassNotation(newBassNotation);
+      setFilteredBassNotation(
+        newBassNotation.filter((notation) => notation !== "|")
+      );
     }
   };
 
-  const handlePianoKeyPress = useCallback(
-    (note: Note) => {
-      if (!userStart) {
-        setUserStart(true);
-      }
-    },
-    [userStart]
-  );
+  const handlePianoKeyPress = useCallback((note: Note) => {}, [userStart]);
 
   const handleResetPress = () => {
     updateNotations();
@@ -113,6 +114,7 @@ const MainPage: React.FC = () => {
 
   useEffect(() => {
     updateNotations();
+
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
     };
@@ -122,7 +124,7 @@ const MainPage: React.FC = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [currNote]);
 
   return (
     <div className="container">
