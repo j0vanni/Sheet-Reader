@@ -1,23 +1,19 @@
 export enum Note {
-  C5 = "C5",
-  D5 = "D5",
-  E5 = "E5",
-  F5 = "F5",
-  G5 = "G5",
-  A5 = "A5",
-  B5 = "B5",
-  CD5 = "CD5",
-  DE5 = "DE5",
-  FG5 = "FG5",
-  GA5 = "GA5",
-  AB5 = "AB5",
+  A = "A",
+  B = "B",
+  C = "C",
+  D = "D",
+  E = "E",
+  F = "F",
+  G = "G",
 }
 
 export interface PianoKey {
-  note: Note;
-  whiteKey?: boolean;
-  blackKey?: boolean;
-  isNatural?: boolean;
+  note: Note[];
+  sharp: boolean;
+  flat: boolean;
+  octave: number;
+  global?: boolean;
 }
 
 export interface PianoProps {
