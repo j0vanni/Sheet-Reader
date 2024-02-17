@@ -129,38 +129,27 @@ const twoHandedNotes = (
   return [trebleNotation, bassNotation];
 };
 
-const noteToNotation = (note: string, sf: string) => {
-  let newNote = "";
-  if (sf !== "") {
-    newNote = sf + note.substring(0, 1);
-  } else {
-    newNote = note.substring(0, 1);
-  }
-  const octave = Number(note.substring(1, 2));
+const noteToNotation = (note: string, accidental: string) => {
+  const baseNote = note.substring(0, 1);
+  const octave = Number(note.substring(1));
+  let newNote = `${accidental}${baseNote}`;
 
   if (octave < 4) {
     newNote += ",".repeat(4 - octave);
   } else if (octave > 4) {
     newNote += "'".repeat(octave - 4);
   }
-  newNote += "2";
-  return newNote;
+
+  return newNote + "2";
 };
 
 const sharpsOrFlats = (sharps: boolean, flats: boolean, percentage: number) => {
-  let sf = "";
-  if (sharps) {
-    if (Math.random() < percentage) {
-      sf += "^";
-    }
+  if (sharps && Math.random() < percentage) {
+    return "^";
+  } else if (flats && Math.random() < percentage) {
+    return "_";
   }
-  if (flats && sf === "") {
-    if (Math.random() < percentage) {
-      sf += "_";
-    }
-  }
-
-  return sf;
+  return "";
 };
 
 const selectWeightedNote = (noteUsageArray: Array<any>) => {
