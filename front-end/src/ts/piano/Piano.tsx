@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import "./Piano.css";
-import { PianoKey, Note, PianoProps } from "./PianoTypes";
+import { PianoKey, Note, PianoProps } from "../Utils/KeyTypes";
 
 const keys: PianoKey[] = [
-  { note: Note.C5, whiteKey: true },
-  { note: Note.CD5, blackKey: true },
-  { note: Note.D5, whiteKey: true },
-  { note: Note.DE5, blackKey: true },
-  { note: Note.E5, whiteKey: true },
-  { note: Note.F5, whiteKey: true },
-  { note: Note.FG5, blackKey: true },
-  { note: Note.G5, whiteKey: true },
-  { note: Note.GA5, blackKey: true },
-  { note: Note.A5, whiteKey: true },
-  { note: Note.AB5, blackKey: true },
-  { note: Note.B5, whiteKey: true },
+  { note: [Note.C], sharp: false, flat: false, octave: 4, global: true },
+  { note: [Note.D], sharp: false, flat: false, octave: 4, global: true },
+  { note: [Note.E], sharp: false, flat: false, octave: 4, global: true },
+  { note: [Note.F], sharp: false, flat: false, octave: 4, global: true },
+  { note: [Note.G], sharp: false, flat: false, octave: 4, global: true },
+  { note: [Note.A], sharp: false, flat: false, octave: 4, global: true },
+  { note: [Note.B], sharp: false, flat: false, octave: 4, global: true },
+  { note: [Note.C, Note.D], sharp: true, flat: true, octave: 4, global: true },
+  { note: [Note.D, Note.E], sharp: true, flat: true, octave: 4, global: true },
+  { note: [Note.F, Note.G], sharp: true, flat: true, octave: 4, global: true },
+  { note: [Note.G, Note.A], sharp: true, flat: true, octave: 4, global: true },
+  { note: [Note.A, Note.B], sharp: true, flat: true, octave: 4, global: true },
 ];
 
 const Piano: React.FC<PianoProps> = ({ onKeyPress, onResetPress }) => {
@@ -26,27 +26,27 @@ const Piano: React.FC<PianoProps> = ({ onKeyPress, onResetPress }) => {
     onResetPress();
   };
 
-  const handleKeyPress = (note: Note) => {
-    onKeyPress(note);
+  const handleKeyPress = (key: PianoKey) => {
+    onKeyPress(key);
   };
 
   const whiteKeys = keys.map((key, index) =>
-    key.whiteKey ? (
+    !key.sharp || !key.flat ? (
       <button
         key={index}
         className="white-key"
-        onClick={() => handleKeyPress(key.note)}
+        onClick={() => handleKeyPress(keys[index])}
         tabIndex={-1}
       ></button>
     ) : null
   );
 
   const blackKeys = keys.map((key, index) =>
-    key.blackKey ? (
+    key.sharp || key.flat ? (
       <button
         key={index}
         className="black-key"
-        onClick={() => handleKeyPress(key.note)}
+        onClick={() => handleKeyPress(keys[index])}
         tabIndex={-1}
       ></button>
     ) : null
