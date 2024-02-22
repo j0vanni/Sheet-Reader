@@ -17,6 +17,6 @@ export interface PianoKey {
 }
 
 export interface PianoProps {
-  onKeyPress: (note: Note) => void;
+  onKeyPress: (key: PianoKey) => void;
   onResetPress: () => void;
 }
