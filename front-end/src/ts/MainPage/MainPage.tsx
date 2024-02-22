@@ -3,11 +3,12 @@ import "./MainPage.css";
 import SheetMusic from "../SheetMusic/SheetMusic";
 import Piano from "../piano/Piano";
 import Options from "../Options/Options";
-import { Note } from "../piano/PianoTypes";
+import { Note, PianoKey } from "../Utils/KeyTypes";
 import {
   generateNotes,
   generateTrebleNotation,
   generateBassNotation,
+  notationToKey,
 } from "../Utils/noteGenerationUtils";
 
 const MainPage: React.FC = () => {
@@ -29,6 +30,7 @@ const MainPage: React.FC = () => {
   const [bassNotation, setBassNotation] = useState([""]);
   const [filteredTrebleNotation, setFilteredTrebleNotation] = useState([""]);
   const [filteredBassNotation, setFilteredBassNotation] = useState([""]);
+  const [keys, setKeys] = useState<PianoKey[]>([]);
 
   const generateNotationsForClef = (clef: string) => {
     return generateNotes(
@@ -114,6 +116,9 @@ const MainPage: React.FC = () => {
 
   useEffect(() => {
     updateNotations();
+
+    const keys = notationToKey(trebleNotation, bassNotation);
+    setKeys(keys);
 
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
