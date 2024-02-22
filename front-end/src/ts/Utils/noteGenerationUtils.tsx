@@ -1,3 +1,4 @@
+import { Note, PianoKey } from "./KeyTypes";
 import { trebleNoteUsage, bassNoteUsage } from "./NoteUsage";
 
 export const generateNotes = (
@@ -81,6 +82,52 @@ export const generateBassNotation = (
     );
   }
   return notation;
+};
+
+export const notationToKey = (
+  notation1: string[],
+  notation2: string[]
+): PianoKey[] => {
+  let keys: PianoKey[] = [];
+
+  for (let i = 0; i < notation1.length && i < notation2.length; i++) {
+    if (notation1[i] !== "|" && notation1[i] !== "x2") {
+      const matchNote1 = notation1[i].match(/[a-gA-G]/g);
+      const sharp1 = notation1[i].includes("^");
+      const flat1 = notation1[i].includes("_");
+      const octave1 = Number(notation1[i].substring(notation1[i].length - 1));
+
+      if (matchNote1) {
+        const note1 = matchNote1[0];
+        let key1: PianoKey = {
+          note: [note1 as Note],
+          sharp: sharp1,
+          flat: flat1,
+          octave: octave1,
+        };
+        keys.push(key1);
+      }
+    }
+
+    if (notation2[i] !== "|" && notation2[i] !== "x2") {
+      const matchNote2 = notation2[i].match(/[a-gA-G]/g);
+      const sharp2 = notation2[i].includes("^");
+      const flat2 = notation2[i].includes("_");
+      const octave2 = Number(notation2[i].substring(notation2[i].length - 1));
+
+      if (matchNote2) {
+        const note2 = matchNote2[0];
+        let key2: PianoKey = {
+          note: [note2 as Note],
+          sharp: sharp2,
+          flat: flat2,
+          octave: octave2,
+        };
+        keys.push(key2);
+      }
+    }
+  }
+  return keys;
 };
 
 const twoHandedNotes = (
