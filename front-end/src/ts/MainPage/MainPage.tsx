@@ -9,6 +9,7 @@ import {
   generateTrebleNotation,
   generateBassNotation,
   notationToKey,
+  compareNotes,
 } from "../Utils/noteGenerationUtils";
 
 const MainPage: React.FC = () => {
@@ -28,9 +29,6 @@ const MainPage: React.FC = () => {
 
   const [trebleNotation, setTrebleNotation] = useState([""]);
   const [bassNotation, setBassNotation] = useState([""]);
-  const [filteredTrebleNotation, setFilteredTrebleNotation] = useState([""]);
-  const [filteredBassNotation, setFilteredBassNotation] = useState([""]);
-  const [keys, setKeys] = useState<PianoKey[]>([]);
 
   const generateNotationsForClef = (clef: string) => {
     return generateNotes(
@@ -96,19 +94,29 @@ const MainPage: React.FC = () => {
 
     if (newTrebleNotation !== trebleNotation) {
       setTrebleNotation(newTrebleNotation);
-      setFilteredTrebleNotation(
-        newTrebleNotation.filter((notation) => notation !== "|")
-      );
     }
     if (newBassNotation !== bassNotation) {
       setBassNotation(newBassNotation);
-      setFilteredBassNotation(
-        newBassNotation.filter((notation) => notation !== "|")
-      );
     }
   };
 
-  const handlePianoKeyPress = useCallback((note: Note) => {}, [userStart]);
+  const handlePianoKeyPress = (note: PianoKey) => {
+    if (trebleNotation[currNote] === "|" || bassNotation[currNote] === "|") {
+      setCurrNote(currNote + 1);
+    }
+    const trebleKey = notationToKey(trebleNotation[currNote]);
+    const bassKey = notationToKey(bassNotation[currNote]);
+
+    if (!sameLine) {
+      if (compareNotes(note, trebleKey) || compareNotes(note, bassKey)) {
+        setCurrNote(currNote + 1);
+      }
+    } else {
+      if (compareNotes(note, trebleKey) && compareNotes(note, bassKey)) {
+        setCurrNote(currNote + 1);
+      }
+    }
+  };
 
   const handleResetPress = () => {
     updateNotations();
@@ -116,9 +124,6 @@ const MainPage: React.FC = () => {
 
   useEffect(() => {
     updateNotations();
-
-    const keys = notationToKey(trebleNotation, bassNotation);
-    setKeys(keys);
 
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
@@ -129,7 +134,7 @@ const MainPage: React.FC = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [currNote]);
+  }, []);
 
   return (
     <div className="container">

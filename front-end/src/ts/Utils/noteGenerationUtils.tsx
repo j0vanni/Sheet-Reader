@@ -84,50 +84,27 @@ export const generateBassNotation = (
   return notation;
 };
 
-export const notationToKey = (
-  notation1: string[],
-  notation2: string[]
-): PianoKey[] => {
-  let keys: PianoKey[] = [];
+export const notationToKey = (note: string): PianoKey | null => {
+  if (note !== "|" && note !== "x2") {
+    const matchNote = note.match(/[a-gA-G]/g);
+    const sharp = note.includes("^");
+    const flat = note.includes("_");
+    const octave = Number(note.substring(note.length - 1));
 
-  for (let i = 0; i < notation1.length && i < notation2.length; i++) {
-    if (notation1[i] !== "|" && notation1[i] !== "x2") {
-      const matchNote1 = notation1[i].match(/[a-gA-G]/g);
-      const sharp1 = notation1[i].includes("^");
-      const flat1 = notation1[i].includes("_");
-      const octave1 = Number(notation1[i].substring(notation1[i].length - 1));
-
-      if (matchNote1) {
-        const note1 = matchNote1[0];
-        let key1: PianoKey = {
-          note: [note1 as Note],
-          sharp: sharp1,
-          flat: flat1,
-          octave: octave1,
-        };
-        keys.push(key1);
-      }
+    if (matchNote) {
+      const note = matchNote[0];
+      let key: PianoKey = {
+        note: [note as Note],
+        sharp: sharp,
+        flat: flat,
+        octave: octave,
+      };
+      return key;
     }
-
-    if (notation2[i] !== "|" && notation2[i] !== "x2") {
-      const matchNote2 = notation2[i].match(/[a-gA-G]/g);
-      const sharp2 = notation2[i].includes("^");
-      const flat2 = notation2[i].includes("_");
-      const octave2 = Number(notation2[i].substring(notation2[i].length - 1));
-
-      if (matchNote2) {
-        const note2 = matchNote2[0];
-        let key2: PianoKey = {
-          note: [note2 as Note],
-          sharp: sharp2,
-          flat: flat2,
-          octave: octave2,
-        };
-        keys.push(key2);
-      }
-    }
+  } else {
+    return null;
   }
-  return keys;
+  return null;
 };
 
 const twoHandedNotes = (
@@ -214,4 +191,26 @@ const selectWeightedNote = (noteUsageArray: Array<any>) => {
     }
   }
   return noteUsageArray[noteUsageArray.length - 1];
+};
+
+export const compareNotes = (
+  note1: PianoKey | null,
+  note2: PianoKey | null
+): boolean => {
+  if (!note1 || !note2) {
+    return false;
+  }
+
+  if (note1.sharp !== note2.sharp || note1.flat !== note2.flat) {
+    return false;
+  }
+
+  if (note1.global || note2.global) {
+  } else {
+    if (note1.octave !== note2.octave) {
+      return false;
+    }
+  }
+
+  return true;
 };
