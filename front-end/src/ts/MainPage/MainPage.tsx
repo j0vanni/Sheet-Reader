@@ -25,7 +25,7 @@ const MainPage: React.FC = () => {
   const noteGenerationLength = 12;
   const lineBreakLength = 4;
   const [userStart, setUserStart] = useState(false);
-  const [currNote, setCurrNote] = useState(0);
+  const [currNote, setCurrNote] = useState(1);
 
   const [trebleNotation, setTrebleNotation] = useState([""]);
   const [bassNotation, setBassNotation] = useState([""]);
@@ -45,6 +45,7 @@ const MainPage: React.FC = () => {
   const updateNotations = () => {
     let newTrebleNotation = trebleNotation;
     let newBassNotation = bassNotation;
+    setCurrNote(0);
 
     if (treble && bass && sameLine) {
       newTrebleNotation = generateTrebleNotation(
@@ -101,19 +102,19 @@ const MainPage: React.FC = () => {
   };
 
   const handlePianoKeyPress = (note: PianoKey) => {
-    if (trebleNotation[currNote] === "|" || bassNotation[currNote] === "|") {
-      setCurrNote(currNote + 1);
-    }
-    const trebleKey = notationToKey(trebleNotation[currNote]);
-    const bassKey = notationToKey(bassNotation[currNote]);
+    const currTreble = notationToKey(trebleNotation[currNote]);
+    const currBass = notationToKey(bassNotation[currNote]);
 
-    if (!sameLine) {
-      if (compareNotes(note, trebleKey) || compareNotes(note, bassKey)) {
-        setCurrNote(currNote + 1);
+    const isTrebleCorrect = compareNotes(currTreble, note);
+    const isBassCorrect = compareNotes(currBass, note);
+
+    if (sameLine) {
+      if (isTrebleCorrect || isBassCorrect) {
+        setCurrNote((prevNote) => prevNote + 1);
       }
     } else {
-      if (compareNotes(note, trebleKey) && compareNotes(note, bassKey)) {
-        setCurrNote(currNote + 1);
+      if (isTrebleCorrect && isBassCorrect) {
+        setCurrNote((prevNote) => prevNote + 1);
       }
     }
   };
@@ -123,7 +124,13 @@ const MainPage: React.FC = () => {
   };
 
   useEffect(() => {
-    updateNotations();
+    if (trebleNotation.length === 0 || bassNotation.length === 0) {
+      updateNotations();
+    }
+
+    if (trebleNotation[currNote] === "|" && bassNotation[currNote] === "|") {
+      setCurrNote((prevNote) => prevNote + 1);
+    }
 
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
@@ -134,7 +141,7 @@ const MainPage: React.FC = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, []);
+  }, [currNote]);
 
   return (
     <div className="container">
