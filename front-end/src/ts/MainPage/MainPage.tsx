@@ -1,16 +1,16 @@
-import React, { useCallback, useEffect, useState } from "react";
-import "./MainPage.css";
-import SheetMusic from "../SheetMusic/SheetMusic";
-import Piano from "../piano/Piano";
+import React, { useEffect, useState } from "react";
 import Options from "../Options/Options";
+import SheetMusic from "../SheetMusic/SheetMusic";
 import { Note, PianoKey } from "../Utils/KeyTypes";
 import {
+  compareNotes,
+  generateBassNotation,
   generateNotes,
   generateTrebleNotation,
-  generateBassNotation,
   notationToKey,
-  compareNotes,
 } from "../Utils/noteGenerationUtils";
+import Piano from "../piano/Piano";
+import "./MainPage.css";
 
 const MainPage: React.FC = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -30,6 +30,9 @@ const MainPage: React.FC = () => {
   const [trebleNotation, setTrebleNotation] = useState([""]);
   const [bassNotation, setBassNotation] = useState([""]);
 
+  const [prevNotePress, setPrevNotePress] = useState<number | null>(null);
+  const [intervals, setIntervals] = useState<number[]>([]);
+
   const generateNotationsForClef = (clef: string) => {
     return generateNotes(
       noteGenerationLength,
@@ -43,6 +46,7 @@ const MainPage: React.FC = () => {
   };
 
   const updateNotations = () => {
+    setUserStart(false);
     let newTrebleNotation = trebleNotation;
     let newBassNotation = bassNotation;
     setCurrNote(0);
@@ -102,6 +106,10 @@ const MainPage: React.FC = () => {
   };
 
   const handlePianoKeyPress = (note: PianoKey) => {
+    if (!userStart) {
+      setUserStart(true);
+    }
+    tempoCheck();
     const currTreble = notationToKey(trebleNotation[currNote]);
     const currBass = notationToKey(bassNotation[currNote]);
 
@@ -121,6 +129,15 @@ const MainPage: React.FC = () => {
 
   const handleResetPress = () => {
     updateNotations();
+  };
+
+  const tempoCheck = () => {
+    const currentTime = Date.now();
+    if (prevNotePress !== null) {
+      const interval = currentTime - prevNotePress;
+      setIntervals([...intervals, interval]);
+    }
+    setPrevNotePress(currentTime);
   };
 
   useEffect(() => {
