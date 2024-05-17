@@ -18,9 +18,9 @@
 }
 
 .piano-container {
-  height: 0;
   position: absolute;
   top: 72.5%;
   left: 50%;
   transform: translate(-50%, -50%);
+  height: 200px;
 }
