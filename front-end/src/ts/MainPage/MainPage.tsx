@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Options from "../Options/Options";
+import Piano from "../Piano/Piano";
 import SheetMusic from "../SheetMusic/SheetMusic";
-import { Note, PianoKey } from "../Utils/KeyTypes";
+import { PianoKey } from "../Utils/KeyTypes";
 import {
   compareNotes,
   generateBassNotation,
@@ -9,7 +10,6 @@ import {
   generateTrebleNotation,
   notationToKey,
 } from "../Utils/noteGenerationUtils";
-import Piano from "../piano/Piano";
 import "./MainPage.css";
 
 const MainPage: React.FC = () => {
@@ -26,6 +26,8 @@ const MainPage: React.FC = () => {
   const lineBreakLength = 4;
   const [userStart, setUserStart] = useState(false);
   const [currNote, setCurrNote] = useState(1);
+  const targetBPM = 60;
+  const targetInterval = 60000 / targetBPM;
 
   const [trebleNotation, setTrebleNotation] = useState([""]);
   const [bassNotation, setBassNotation] = useState([""]);
@@ -50,6 +52,7 @@ const MainPage: React.FC = () => {
     let newTrebleNotation = trebleNotation;
     let newBassNotation = bassNotation;
     setCurrNote(0);
+    setIntervals([]);
 
     if (treble && bass && sameLine) {
       newTrebleNotation = generateTrebleNotation(
@@ -109,22 +112,28 @@ const MainPage: React.FC = () => {
     if (!userStart) {
       setUserStart(true);
     }
-    tempoCheck();
+    if (currNote >= noteGenerationLength) {
+      return;
+    }
+    const tempo = tempoCheck();
     const currTreble = notationToKey(trebleNotation[currNote]);
     const currBass = notationToKey(bassNotation[currNote]);
 
     const isTrebleCorrect = compareNotes(currTreble, note);
     const isBassCorrect = compareNotes(currBass, note);
 
-    if (sameLine) {
-      if (isTrebleCorrect || isBassCorrect) {
-        setCurrNote((prevNote) => prevNote + 1);
-      }
-    } else {
-      if (isTrebleCorrect && isBassCorrect) {
-        setCurrNote((prevNote) => prevNote + 1);
-      }
+    if (isTrebleCorrect) {
+      console.log("Treble Correct", tempo);
     }
+    if (isBassCorrect) {
+      console.log("Bass Correct", tempo);
+    }
+
+    if (isTrebleCorrect || isBassCorrect) {
+      setCurrNote((prevNote) => prevNote + 1);
+    }
+
+    console.log(currNote);
   };
 
   const handleResetPress = () => {
@@ -133,15 +142,32 @@ const MainPage: React.FC = () => {
 
   const tempoCheck = () => {
     const currentTime = Date.now();
+    let currentBPM = 0;
+    let interval = 0;
     if (prevNotePress !== null) {
-      const interval = currentTime - prevNotePress;
+      interval = currentTime - prevNotePress;
       setIntervals([...intervals, interval]);
     }
     setPrevNotePress(currentTime);
+
+    if (interval > 0) {
+      currentBPM = 60000 / interval;
+
+      if (currentBPM !== targetBPM) {
+        const adjustmentFactor = interval / targetInterval;
+        interval /= adjustmentFactor;
+      }
+    }
+    return currentBPM;
   };
 
   useEffect(() => {
-    if (trebleNotation.length === 0 || bassNotation.length === 0) {
+    if (
+      trebleNotation.length === 0 ||
+      bassNotation.length === 0 ||
+      trebleNotation[0] === "" ||
+      bassNotation[0] === ""
+    ) {
       updateNotations();
     }
 
