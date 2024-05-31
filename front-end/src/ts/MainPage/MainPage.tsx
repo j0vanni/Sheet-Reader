@@ -11,6 +11,7 @@ import {
   notationToKey,
 } from "../Utils/noteGenerationUtils";
 import "./MainPage.css";
+import Metronome from "../Metronome/Metronome";
 
 const MainPage: React.FC = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -21,11 +22,13 @@ const MainPage: React.FC = () => {
   const [seconds, setSeconds] = useState(30);
   const [tempo, setTempo] = useState(false);
   const [sameLine, setSameLine] = useState(false);
+  const [metronome, setMetronome] = useState(false);
   const flatsharpPercentage = 0.2;
   const noteGenerationLength = 12;
   const lineBreakLength = 4;
   const [userStart, setUserStart] = useState(false);
-  const [currNote, setCurrNote] = useState(1);
+  const [currNote, setCurrNote] = useState(0);
+  const [currNotePress, setCurrNotePress] = useState(0);
   const targetBPM = 60;
   const targetInterval = 60000 / targetBPM;
 
@@ -53,6 +56,7 @@ const MainPage: React.FC = () => {
     let newBassNotation = bassNotation;
     setCurrNote(0);
     setIntervals([]);
+    setCurrNotePress(0);
 
     if (treble && bass && sameLine) {
       newTrebleNotation = generateTrebleNotation(
@@ -112,7 +116,8 @@ const MainPage: React.FC = () => {
     if (!userStart) {
       setUserStart(true);
     }
-    if (currNote >= noteGenerationLength) {
+
+    if (currNotePress >= noteGenerationLength) {
       return;
     }
     const tempo = tempoCheck();
@@ -122,18 +127,10 @@ const MainPage: React.FC = () => {
     const isTrebleCorrect = compareNotes(currTreble, note);
     const isBassCorrect = compareNotes(currBass, note);
 
-    if (isTrebleCorrect) {
-      console.log("Treble Correct", tempo);
-    }
-    if (isBassCorrect) {
-      console.log("Bass Correct", tempo);
-    }
-
     if (isTrebleCorrect || isBassCorrect) {
       setCurrNote((prevNote) => prevNote + 1);
+      setCurrNotePress((prevNotePress) => prevNotePress + 1);
     }
-
-    console.log(currNote);
   };
 
   const handleResetPress = () => {
@@ -204,6 +201,8 @@ const MainPage: React.FC = () => {
           setTempo={setTempo}
           sameLine={sameLine}
           setSameLine={setSameLine}
+          metronome={metronome}
+          setMetronome={setMetronome}
         />
       </div>
       <div className="sm-container">
@@ -240,6 +239,13 @@ const MainPage: React.FC = () => {
               selectTypes: [],
             },
           }}
+        />
+      </div>
+      <div className="metronome-container">
+        <Metronome
+          userStart={userStart}
+          BPM={targetBPM}
+          useMetronome={metronome}
         />
       </div>
       <div className="piano-container" tabIndex={1}>
