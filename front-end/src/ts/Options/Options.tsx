@@ -1,22 +1,6 @@
 import React from "react";
 import "./Options.css";
-
-type OptionsProps = {
-  treble: boolean;
-  setTreble: (value: boolean) => void;
-  bass: boolean;
-  setBass: (value: boolean) => void;
-  sharps: boolean;
-  setSharps: (value: boolean) => void;
-  flats: boolean;
-  setFlats: (value: boolean) => void;
-  seconds: number;
-  setSeconds: (value: number) => void;
-  tempo: boolean;
-  setTempo: (value: boolean) => void;
-  sameLine: boolean;
-  setSameLine: (value: boolean) => void;
-};
+import { OptionsProps } from "./OptionsUtils";
 
 const Options: React.FC<OptionsProps> = ({
   treble,
@@ -33,6 +17,8 @@ const Options: React.FC<OptionsProps> = ({
   setTempo,
   sameLine,
   setSameLine,
+  metronome,
+  setMetronome,
 }) => {
   return (
     <div className="op-container" tabIndex={-1}>
@@ -84,6 +70,9 @@ const Options: React.FC<OptionsProps> = ({
         </button>
         <button onClick={() => setTempo(!tempo)} tabIndex={-1}>
           <p className={tempo ? "selected" : "unselected"}>Match Tempo</p>
+        </button>
+        <button onClick={() => setMetronome(!metronome)} tabIndex={-1}>
+          <p className={metronome ? "selected" : "unselected"}>Use Metronome</p>
         </button>
       </div>
     </div>
