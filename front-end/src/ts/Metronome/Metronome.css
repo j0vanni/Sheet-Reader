@@ -1,0 +1,43 @@
+.container {
+  justify-content: center;
+  display: flex;
+}
+
+.metronome_frontbase {
+  width: 0;
+  height: 0;
+  z-index: 1;
+  /* border-bottom: 70px solid #493425; */
+  border-bottom: 70px solid #a1a1a1;
+  border-right: 15px solid transparent;
+  border-left: 15px solid transparent;
+  position: absolute;
+}
+
+.metronome_backbase {
+  width: 0;
+  height: 0;
+  /* border-bottom: 95px solid #231a13; */
+  border-bottom: 95px solid #000000;
+  border-right: 25px solid transparent;
+  border-left: 25px solid transparent;
+  position: absolute;
+}
+
+.metronome_top {
+  width: 25px;
+  height: 15px;
+  z-index: 2;
+  position: absolute;
+  background-color: #121212;
+}
+
+.pendulum {
+  width: 3px;
+  height: 50px;
+  background-color: #474747;
+  position: absolute;
+  top: 20px;
+  left: -1.5px;
+  transform-origin: bottom;
+}
