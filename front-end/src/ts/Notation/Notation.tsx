@@ -1,6 +1,6 @@
 import react from "react";
 import abcjs, { AbcVisualParams } from "abcjs";
-import { NotationProps } from "./NotationTypes";
+import { NotationProps } from "./NotationUtils";
 
 const Notation: react.FC<NotationProps> = ({ notation, renderOptions }) => {
   const notationRef = react.useRef<HTMLDivElement>(null);
