@@ -1,4 +1,4 @@
-import { RenderOptions } from "../Notation/NotationTypes";
+import { RenderOptions } from "../Notation/NotationUtils";
 
 declare namespace SheetTypes {
   enum Scale {
