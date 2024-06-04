@@ -27,6 +27,12 @@
 
 .metronome-container {
   position: absolute;
-  top: 18.5rem;
-  left: 7rem;
+  left: -10%;
+  top: -10%;
+}
+
+.note-correct-text {
+  position: absolute;
+  top: 100px;
+  transition: all 1s ease;
 }
