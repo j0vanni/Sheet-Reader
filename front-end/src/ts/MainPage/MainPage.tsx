@@ -2,187 +2,41 @@ import React, { useEffect, useState } from "react";
 import Options from "../Options/Options";
 import Piano from "../Piano/Piano";
 import SheetMusic from "../SheetMusic/SheetMusic";
-import { PianoKey } from "../Utils/KeyTypes";
-import {
-  compareNotes,
-  generateBassNotation,
-  generateNotes,
-  generateTrebleNotation,
-  notationToKey,
-} from "../Utils/noteGenerationUtils";
+import { useMainPageState } from "./MainPageUtils";
 import "./MainPage.css";
 import Metronome from "../Metronome/Metronome";
 
 const MainPage: React.FC = () => {
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
-  const [treble, setTreble] = useState(true);
-  const [bass, setBass] = useState(true);
-  const [sharps, setSharps] = useState(false);
-  const [flats, setFlats] = useState(false);
-  const [seconds, setSeconds] = useState(30);
-  const [tempo, setTempo] = useState(false);
-  const [sameLine, setSameLine] = useState(false);
-  const [metronome, setMetronome] = useState(false);
-  const flatsharpPercentage = 0.2;
-  const noteGenerationLength = 12;
-  const lineBreakLength = 4;
-  const [userStart, setUserStart] = useState(false);
-  const [currNote, setCurrNote] = useState(0);
-  const [currNotePress, setCurrNotePress] = useState(0);
-  const targetBPM = 60;
-  const targetInterval = 60000 / targetBPM;
 
-  const [trebleNotation, setTrebleNotation] = useState([""]);
-  const [bassNotation, setBassNotation] = useState([""]);
-
-  const [prevNotePress, setPrevNotePress] = useState<number | null>(null);
-  const [intervals, setIntervals] = useState<number[]>([]);
-
-  const generateNotationsForClef = (clef: string) => {
-    return generateNotes(
-      noteGenerationLength,
-      sharps,
-      flats,
-      lineBreakLength,
-      sameLine,
-      flatsharpPercentage,
-      clef
-    );
-  };
-
-  const updateNotations = () => {
-    setUserStart(false);
-    let newTrebleNotation = trebleNotation;
-    let newBassNotation = bassNotation;
-    setCurrNote(0);
-    setIntervals([]);
-    setCurrNotePress(0);
-
-    if (treble && bass && sameLine) {
-      newTrebleNotation = generateTrebleNotation(
-        noteGenerationLength,
-        sharps,
-        flats,
-        lineBreakLength,
-        flatsharpPercentage
-      );
-      newBassNotation = generateBassNotation(
-        noteGenerationLength,
-        sharps,
-        flats,
-        lineBreakLength,
-        flatsharpPercentage
-      );
-    }
-
-    if (treble && bass && !sameLine) {
-      const notation = generateNotes(
-        noteGenerationLength,
-        sharps,
-        flats,
-        lineBreakLength,
-        sameLine,
-        flatsharpPercentage
-      );
-      newTrebleNotation = notation ? notation[0] : [];
-      newBassNotation = notation ? notation[1] : [];
-    }
-
-    if (treble && !bass) {
-      const notations = generateNotationsForClef("treble");
-      if (notations) {
-        newTrebleNotation = notations[0];
-        newBassNotation = notations[1];
-      }
-    }
-
-    if (!treble && bass) {
-      const notations = generateNotationsForClef("bass");
-      if (notations) {
-        newTrebleNotation = notations[0];
-        newBassNotation = notations[1];
-      }
-    }
-
-    if (newTrebleNotation !== trebleNotation) {
-      setTrebleNotation(newTrebleNotation);
-    }
-    if (newBassNotation !== bassNotation) {
-      setBassNotation(newBassNotation);
-    }
-  };
-
-  const handlePianoKeyPress = (note: PianoKey) => {
-    if (!userStart) {
-      setUserStart(true);
-    }
-
-    if (currNotePress >= noteGenerationLength) {
-      return;
-    }
-    const tempo = tempoCheck();
-    const currTreble = notationToKey(trebleNotation[currNote]);
-    const currBass = notationToKey(bassNotation[currNote]);
-
-    const isTrebleCorrect = compareNotes(currTreble, note);
-    const isBassCorrect = compareNotes(currBass, note);
-
-    if (isTrebleCorrect || isBassCorrect) {
-      setCurrNote((prevNote) => prevNote + 1);
-      setCurrNotePress((prevNotePress) => prevNotePress + 1);
-    }
-  };
-
-  const handleResetPress = () => {
-    updateNotations();
-  };
-
-  const tempoCheck = () => {
-    const currentTime = Date.now();
-    let currentBPM = 0;
-    let interval = 0;
-    if (prevNotePress !== null) {
-      interval = currentTime - prevNotePress;
-      setIntervals([...intervals, interval]);
-    }
-    setPrevNotePress(currentTime);
-
-    if (interval > 0) {
-      currentBPM = 60000 / interval;
-
-      if (currentBPM !== targetBPM) {
-        const adjustmentFactor = interval / targetInterval;
-        interval /= adjustmentFactor;
-      }
-    }
-    return currentBPM;
-  };
-
-  useEffect(() => {
-    if (
-      trebleNotation.length === 0 ||
-      bassNotation.length === 0 ||
-      trebleNotation[0] === "" ||
-      bassNotation[0] === ""
-    ) {
-      updateNotations();
-    }
-
-    if (trebleNotation[currNote] === "|" && bassNotation[currNote] === "|") {
-      setCurrNote((prevNote) => prevNote + 1);
-    }
-
-    const handleResize = () => {
-      setScreenWidth(window.innerWidth);
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [currNote]);
-
+  const {
+    treble,
+    setTreble,
+    bass,
+    setBass,
+    sharps,
+    setSharps,
+    flats,
+    setFlats,
+    seconds,
+    setSeconds,
+    tempo,
+    setTempo,
+    sameLine,
+    setSameLine,
+    metronome,
+    setMetronome,
+    beatspermin,
+    setBPM,
+    currNote,
+    trebleNotation,
+    bassNotation,
+    screenWidth,
+    userStart,
+    noteCorrectTextOpactiy,
+    handlePianoKeyPress,
+    handleResetPress
+  } = useMainPageState();
+  
   return (
     <div className="container">
       <div className="options-container">
@@ -203,6 +57,8 @@ const MainPage: React.FC = () => {
           setSameLine={setSameLine}
           metronome={metronome}
           setMetronome={setMetronome}
+          beatspermin={beatspermin}
+          setBPM={setBPM}
         />
       </div>
       <div className="sm-container">
@@ -241,14 +97,23 @@ const MainPage: React.FC = () => {
           }}
         />
       </div>
-      <div className="metronome-container">
-        <Metronome
-          userStart={userStart}
-          BPM={targetBPM}
-          useMetronome={metronome}
-        />
+      
+      <div
+        className="note-correct-text"
+        style={{ opacity: noteCorrectTextOpactiy }}
+      >
+        test
       </div>
       <div className="piano-container" tabIndex={1}>
+        {metronome && (
+        <div className="metronome-container">
+          <Metronome
+            userStart={userStart}
+            BPM={beatspermin}
+            useMetronome={metronome}
+          />
+        </div>
+      )}
         <Piano
           onKeyPress={handlePianoKeyPress}
           onResetPress={handleResetPress}
