@@ -15,4 +15,6 @@ export type OptionsProps = {
   setSameLine: (value: boolean) => void;
   metronome: boolean;
   setMetronome: (value: boolean) => void;
+  beatspermin: number;
+  setBPM: (value: number) => void;
 };

@@ -19,6 +19,8 @@ const Options: React.FC<OptionsProps> = ({
   setSameLine,
   metronome,
   setMetronome,
+  beatspermin,
+  setBPM
 }) => {
   return (
     <div className="op-container" tabIndex={-1}>
