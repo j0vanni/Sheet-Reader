@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import Options from "../Options/Options";
 import Piano from "../Piano/Piano";
 import SheetMusic from "../SheetMusic/SheetMusic";
-import { useMainPageState } from "./MainPageUtils";
+import { useMainPageState } from "../Utils/MainPageUtils";
 import "./MainPage.css";
 import Metronome from "../Metronome/Metronome";
 
 const MainPage: React.FC = () => {
-
   const {
     treble,
     setTreble,
@@ -34,9 +33,9 @@ const MainPage: React.FC = () => {
     userStart,
     noteCorrectTextOpactiy,
     handlePianoKeyPress,
-    handleResetPress
+    handleResetPress,
   } = useMainPageState();
-  
+
   return (
     <div className="container">
       <div className="options-container">
@@ -70,6 +69,7 @@ const MainPage: React.FC = () => {
             clef: "treble",
             notation: trebleNotation,
             renderOptions: {
+              add_classes: true,
               scale: 1.5,
               paddingbottom: 1,
               paddingright: 1,
@@ -87,6 +87,7 @@ const MainPage: React.FC = () => {
             clef: "bass",
             notation: bassNotation,
             renderOptions: {
+              add_classes: true,
               scale: 1.5,
               paddingtop: 1,
               paddingright: 1,
@@ -97,7 +98,7 @@ const MainPage: React.FC = () => {
           }}
         />
       </div>
-      
+
       <div
         className="note-correct-text"
         style={{ opacity: noteCorrectTextOpactiy }}
@@ -106,14 +107,14 @@ const MainPage: React.FC = () => {
       </div>
       <div className="piano-container" tabIndex={1}>
         {metronome && (
-        <div className="metronome-container">
-          <Metronome
-            userStart={userStart}
-            BPM={beatspermin}
-            useMetronome={metronome}
-          />
-        </div>
-      )}
+          <div className="metronome-container">
+            <Metronome
+              userStart={userStart}
+              BPM={beatspermin}
+              useMetronome={metronome}
+            />
+          </div>
+        )}
         <Piano
           onKeyPress={handlePianoKeyPress}
           onResetPress={handleResetPress}
