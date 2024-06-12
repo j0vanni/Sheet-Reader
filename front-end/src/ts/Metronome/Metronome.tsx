@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Metronome.css";
-import { MetronomeProps } from "./MetronomeUtils";
+import { MetronomeProps } from "../Utils/MetronomeUtils";
 
 const Metronome: React.FC<MetronomeProps> = ({
   userStart,
