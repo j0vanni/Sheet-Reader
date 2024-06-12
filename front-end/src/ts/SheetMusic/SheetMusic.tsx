@@ -1,6 +1,6 @@
 import React from "react";
 import Notation from "../Notation/Notation";
-import SheetTypes from "./SheetTypes";
+import SheetTypes from "../Utils/SheetTypes";
 import "./SheetMusic.css";
 
 interface SheetMusicProps {

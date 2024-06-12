@@ -1,6 +1,6 @@
 import React from "react";
 import "./Options.css";
-import { OptionsProps } from "./OptionsUtils";
+import { OptionsProps } from "../Utils/OptionsUtils";
 
 const Options: React.FC<OptionsProps> = ({
   treble,
