@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import {
   compareNotes,
   generateBassNotation,
@@ -6,7 +6,7 @@ import {
   generateTrebleNotation,
   notationToKey,
 } from "../Utils/noteGenerationUtils";
-import { PianoKey } from "../Utils/KeyTypes";
+import { Note, PianoKey } from "../Utils/KeyTypes";
 
 export const useMainPageState = () => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth);
@@ -14,47 +14,137 @@ export const useMainPageState = () => {
   const [treble, setTreble] = useState(true); //on by default
   const [bass, setBass] = useState(true); //on by default
   //notation modifiers, if on will include sharps/flats randomly throughout
-  const [sharps, setSharps] = useState(false);
+  const [sharp, setSharp] = useState(false);
   const [flats, setFlats] = useState(false);
   //user perferences
   const [seconds, setSeconds] = useState(30);
+  const [secondsTimer, setSecondsTimer] = useState(seconds);
   const [tempo, setTempo] = useState(false);
   const [sameLine, setSameLine] = useState(false); //same line, use both sheets at the same time, meant for midi device use
   const [metronome, setMetronome] = useState(false); //will display a metronome with the desired BPM, to include sound later on
   const [beatspermin, setBPM] = useState(60);
-  //starting test
+  const [continueOnWrong, setContinueOnWrong] = useState(true); //if the user wants to continue on wrong notes
+  //starting test / data for final
   const [userStart, setUserStart] = useState(false); //starts when user touches a key
   const [currNote, setCurrNote] = useState(0); //the curr note index not including the breaks
   const [currNotePress, setCurrNotePress] = useState(0); //the curr note index not including the breaks and removing the breaks from the index count
   const [prevNotePress, setPrevNotePress] = useState<number | null>(null); //the time the user previously pressed the key, to help calculate the bpm
   const [intervals, setIntervals] = useState<number[]>([]); //the time intervals between notes, in an array to store for future reference
+  const [bpms, setBPMS] = useState<number[]>([]);
   const [isLastNoteCorrect, setIsLastNoteCorrect] = useState(false); //checks if the last press is correct, to be changed to an array for future storage
   const [noteCorrectTextOpactiy, setNoteCorrectTextOpactiy] = useState(0); //makes the text appear (100), then disappear (0)
+  const [testComplete, setTestComplete] = useState(false);
+  const [sheetScale, setSheetScale] = useState(1.5);
+  const [finalResults, setFinalResults] = useState<{
+    treble: boolean;
+    bass: boolean;
+    sharp: boolean;
+    flats: boolean;
+    seconds: number;
+    tempo: boolean;
+    sameLine: boolean;
+    bpms: number[];
+    beatspermin: number;
+    continueOnWrong: boolean;
+    fullTrebleNotation: string[];
+    fullBassNotation: string[];
+    fullHightlightArray: string[];
+  } | null>(null);
+  const [time, setTime] = useState(0);
+  const [correctNotes, setCorrectNotes] = useState<number>(0);
+  const [wrongNotes, setWrongNotes] = useState<number>(0);
+  const [fullTrebleNotation, setFullTrebleNotation] = useState<string[]>([]);
+  const [fullBassNotation, setFullBassNotation] = useState<string[]>([]);
+  const [fullHightlightArray, setFullHighlightArray] = useState<string[]>([]);
   //notations start empty as they get randomly generated when site is loaded
-  const [trebleNotation, setTrebleNotation] = useState(["!mark!C2"]);
+  const [trebleNotation, setTrebleNotation] = useState([""]);
   const [bassNotation, setBassNotation] = useState([""]);
+  const [highlightArray, setHighlightArray] = useState<string[]>(["white"]);
   //note generation, to be seen what can be changed/adjusted
   const flatsharpPercentage = 0.2; //if flats/sharps are enabled, 20% will be flats/sharps
-  const noteGenerationLength = 12; //length is 12 notes, good size normally
   const lineBreakLength = 4; //after 4 notes, a line break will be made
+  const noteGenerationLength = 4 * lineBreakLength; //length is 12 notes, good size normally
   const targetInterval = 60000 / beatspermin; //allows the intervals to compare with the bpm
   const bpmLeeway = 5; //the leeway given for the bpm. if you wanna be perfect, set to 0
 
+  const previousHighlightRef = useRef<{
+    noteIndex: number;
+    measureIndex: number;
+  } | null>(null);
+
   useEffect(() => {
+    // console.log(testComplete);
     //if the notations are empty, generate new ones (when the site is first loaded)
     if (
       (trebleNotation.length === 0 && bassNotation.length === 0) ||
       (trebleNotation[0] === "" && bassNotation[0] === "")
     ) {
+      resetTest();
       updateNotations();
+      clearHighlightStyles();
     }
-    //if the last note is correct, show the correct text
-    setNoteCorrectTextOpactiy(isLastNoteCorrect ? 1 : 0);
+
+    if (currNote === trebleNotation.length - lineBreakLength) {
+      const endTreble = trebleNotation.slice(
+        trebleNotation.length - (lineBreakLength + 1),
+        trebleNotation.length
+      );
+      const endBass = bassNotation.slice(
+        bassNotation.length - (lineBreakLength + 1),
+        bassNotation.length
+      );
+      // console.log(endTreble, endBass);
+
+      setFullTrebleNotation((prev) => [
+        ...prev,
+        ...trebleNotation.slice(
+          0,
+          trebleNotation.length - (lineBreakLength + 1)
+        ),
+      ]);
+      setFullBassNotation((prev) => [
+        ...prev,
+        ...bassNotation.slice(0, bassNotation.length - (lineBreakLength + 1)),
+      ]);
+
+      setFullHighlightArray((prev) => [
+        ...prev,
+        ...highlightArray.slice(0, -1),
+      ]);
+
+      setCurrNote(0);
+      setCurrNotePress(0);
+
+      const initialHighlightArray = Array(highlightArray.length).fill("gray");
+      console.log(fullHightlightArray);
+
+      setHighlightArray(initialHighlightArray);
+
+      updateHighlight(highlightArray, lineBreakLength);
+
+      updateNotations();
+
+      const modifiedNewTreble = endTreble.concat(
+        trebleNotation.slice(0, trebleNotation.length - endTreble.length)
+      );
+      const modifiedNewBass = endBass.concat(
+        bassNotation.slice(0, bassNotation.length - endBass.length)
+      );
+
+      setTrebleNotation(modifiedNewTreble);
+      setBassNotation(modifiedNewBass);
+    }
 
     //if the curr note is a line break, we move ahead/skip it
     if (trebleNotation[currNote] === "|" && bassNotation[currNote] === "|") {
       setCurrNote((prevNote) => prevNote + 1);
     }
+
+    if (!userStart && seconds != secondsTimer) {
+      setSecondsTimer(seconds);
+    }
+
+    updateHighlight(highlightArray, lineBreakLength);
 
     const handleResize = () => {
       setScreenWidth(window.innerWidth);
@@ -65,12 +155,55 @@ export const useMainPageState = () => {
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [currNote, setNoteCorrectTextOpactiy, isLastNoteCorrect]);
+  }, [
+    currNote,
+    setNoteCorrectTextOpactiy,
+    isLastNoteCorrect,
+    trebleNotation,
+    bassNotation,
+    seconds,
+  ]);
+
+  //timer for the test, will count down from the seconds given, will stop when the seconds reach 0
+  useEffect(() => {
+    if (userStart) {
+      const intervalId = setInterval(() => {
+        setSecondsTimer((prev) => {
+          if (prev > 0) {
+            return prev - 1;
+          } else {
+            //when the timer reaches 0, we stop the test
+            setTestComplete(true);
+            setFinalResults({
+              treble,
+              bass,
+              sharp,
+              flats,
+              seconds,
+              tempo,
+              sameLine,
+              bpms,
+              beatspermin,
+              continueOnWrong,
+              fullTrebleNotation,
+              fullBassNotation,
+              fullHightlightArray,
+            });
+            clearInterval(intervalId);
+            setSheetScale(0.8);
+            return 0;
+          }
+        });
+      }, 1000);
+
+      return () => clearInterval(intervalId);
+    }
+  }, [userStart]);
 
   const generateNotationsForClef = (clef: string) => {
     return generateNotes(
       noteGenerationLength,
-      sharps,
+      sharp,
       flats,
       lineBreakLength,
       sameLine,
@@ -80,9 +213,12 @@ export const useMainPageState = () => {
   };
 
   const handleResetPress = () => {
+    resetTest();
     updateNotations();
+    clearHighlightStyles();
   };
 
+  //needs to be fixed
   const tempoCheck = () => {
     //get the current time to compare with the previous time
     const currentTime = Date.now();
@@ -103,30 +239,45 @@ export const useMainPageState = () => {
       //convert the interval ms to a BPM value
       currentBPM = 60000 / interval;
     }
-    return currentBPM;
+
+    setBPMS([...bpms, currentBPM]);
   };
 
-  const updateNotations = () => {
+  const resetTest = () => {
     //we set everything to false/0 as this should be a new test
     setUserStart(false);
-    let newTrebleNotation = trebleNotation;
-    let newBassNotation = bassNotation;
+    setTestComplete(false);
     setCurrNote(0);
     setIntervals([]);
     setCurrNotePress(0);
+    setSecondsTimer(seconds);
+    setFinalResults(null);
+    setSheetScale(1.5);
+    setCorrectNotes(0);
+    setWrongNotes(0);
+    setHighlightArray(["white"]);
+    updateHighlight(highlightArray, lineBreakLength);
+    setFullTrebleNotation([]);
+    setFullBassNotation([]);
+    setFullHighlightArray([]);
+  };
+
+  const updateNotations = () => {
+    let newTrebleNotation = trebleNotation;
+    let newBassNotation = bassNotation;
 
     //generate both treble and bass with disregard for overlapping notes
     if (treble && bass && sameLine) {
       newTrebleNotation = generateTrebleNotation(
         noteGenerationLength,
-        sharps,
+        sharp,
         flats,
         lineBreakLength,
         flatsharpPercentage
       );
       newBassNotation = generateBassNotation(
         noteGenerationLength,
-        sharps,
+        sharp,
         flats,
         lineBreakLength,
         flatsharpPercentage
@@ -135,7 +286,7 @@ export const useMainPageState = () => {
     } else if (treble && bass && !sameLine) {
       const notation = generateNotes(
         noteGenerationLength,
-        sharps,
+        sharp,
         flats,
         lineBreakLength,
         sameLine,
@@ -179,7 +330,7 @@ export const useMainPageState = () => {
       setUserStart(true);
     }
     //gets the tempo between the current note and the last note
-    const tempo = tempoCheck();
+    tempoCheck();
     //converts the notations (arrays) to Notes
     const currTreble = notationToKey(trebleNotation[currNote]);
     const currBass = notationToKey(bassNotation[currNote]);
@@ -188,18 +339,127 @@ export const useMainPageState = () => {
     const isTrebleCorrect = compareNotes(currTreble, note);
     const isBassCorrect = compareNotes(currBass, note);
 
+    const newHighlightArray = [...highlightArray];
+
     //if either treble or bass is correct with the note pressed,
     //it will continue
     //needs to be adjusted for if the two handed option is on and
     //need to add if user wants to pause when wrong
-    if (isTrebleCorrect || isBassCorrect) {
+    if (!sameLine && (isTrebleCorrect || isBassCorrect)) {
       //sets the last note to correct
       setIsLastNoteCorrect(true);
+      newHighlightArray[currNotePress + 1] = "white";
+      newHighlightArray[currNotePress] = "green";
       //moves the curr note forward, this one is with line breaks included
       setCurrNote((prevNote) => prevNote + 1);
       //move the curr note press forward, without line breaks (important)
       setCurrNotePress((prevNotePress) => prevNotePress + 1);
+    } else if (sameLine && isTrebleCorrect && isBassCorrect) {
+      setIsLastNoteCorrect(true);
+      newHighlightArray[currNotePress + 1] = "white";
+      newHighlightArray[currNotePress] = "green";
+      setCurrNote((prevNote) => prevNote + 1);
+      setCurrNotePress((prevNotePress) => prevNotePress + 1);
+    } else {
+      setIsLastNoteCorrect(false);
+      newHighlightArray[currNotePress + 1] = "white";
+      newHighlightArray[currNotePress] = "red";
+      if (continueOnWrong) {
+        setCurrNote((prevNote) => prevNote + 1);
+        setCurrNotePress((prevNotePress) => prevNotePress + 1);
+      }
     }
+
+    setHighlightArray(newHighlightArray);
+  };
+
+  //given an array of colors, will update the colors of the notes
+  //allows for a better and easier way to update the colors of the notes
+  const updateHighlight = (colorArray: string[], notesPerMeasure: number) => {
+    for (let i = 0; i < colorArray.length; i++) {
+      const noteIndex = i % notesPerMeasure;
+      const measureIndex = Math.floor(i / notesPerMeasure);
+
+      const style = document.createElement("style");
+      document.head.appendChild(style);
+      const sheet = style.sheet;
+      sheet?.insertRule(
+        `.abcjs-n${noteIndex}.abcjs-m${measureIndex} { fill: ${colorArray[i]}; }`,
+        sheet.cssRules.length
+      );
+    }
+  };
+
+  //OUTDATED
+  //too complex, not as free flowing as the current method
+  //we want to update so that every note before hand is a color
+  //the curr note is a different color
+  //and the notes after are the default color
+  // const noteHighlight = (
+  //   currNoteIndex: number,
+  //   notesPerMeasure: number,
+  //   currColor: string,
+  //   wrongColor: string,
+  //   correctColor: string,
+  //   correct: boolean
+  // ) => {
+  //   const style = document.createElement("style");
+  //   document.head.appendChild(style);
+  //   const sheet = style.sheet;
+  //   if (previousHighlightRef.current && correct) {
+  //     let { noteIndex, measureIndex } = previousHighlightRef.current;
+  //     sheet?.insertRule(
+  //       `.abcjs-n${noteIndex}.abcjs-m${measureIndex} { fill: ${correctColor}; }`,
+  //       sheet.cssRules.length
+  //     );
+  //   } else if (previousHighlightRef.current && !correct) {
+  //     let { noteIndex, measureIndex } = previousHighlightRef.current;
+  //     sheet?.insertRule(
+  //       `.abcjs-n${noteIndex}.abcjs-m${measureIndex} { fill: ${wrongColor}; }`,
+  //       sheet.cssRules.length
+  //     );
+  //   }
+  //   const noteIndex = currNoteIndex % notesPerMeasure;
+  //   const measureIndex = Math.floor(currNoteIndex / notesPerMeasure);
+  //   sheet?.insertRule(
+  //     `.abcjs-n${noteIndex}.abcjs-m${measureIndex} { fill: ${currColor}; }`,
+  //     sheet.cssRules.length
+  //   );
+  //   previousHighlightRef.current = { noteIndex, measureIndex };
+  // };
+
+  const clearHighlightStyles = () => {
+    const styleSheets = document.styleSheets;
+    for (let i = 0; i < styleSheets.length; i++) {
+      const sheet = styleSheets[i];
+      if (sheet.ownerNode && sheet.ownerNode.nodeName === "STYLE") {
+        const rules = sheet.cssRules;
+        for (let j = 0; j < rules.length; j++) {
+          const rule = rules[j];
+          if (
+            rule instanceof CSSStyleRule &&
+            rule.selectorText.includes("abcjs-") &&
+            !rule.selectorText.includes(".abcjs-v") &&
+            !rule.selectorText.includes("abcjs-staff-extra") &&
+            !rule.selectorText.includes("abcjs-bar")
+          ) {
+            rule.style.fill = "gray";
+          }
+        }
+      }
+    }
+
+    // Reset previousHighlightRef to initial state
+    previousHighlightRef.current = { noteIndex: 0, measureIndex: 0 };
+
+    // Set the note at index 0 to white
+    const style = document.createElement("style");
+    document.head.appendChild(style);
+    const sheet = style.sheet;
+    sheet?.insertRule(
+      `.abcjs-n0.abcjs-m0 { fill: gray; }`,
+      sheet.cssRules.length
+    );
   };
 
   return {
@@ -207,8 +467,8 @@ export const useMainPageState = () => {
     setTreble,
     bass,
     setBass,
-    sharps,
-    setSharps,
+    sharp,
+    setSharp,
     flats,
     setFlats,
     seconds,
@@ -229,5 +489,16 @@ export const useMainPageState = () => {
     noteCorrectTextOpactiy,
     handlePianoKeyPress,
     handleResetPress,
+    continueOnWrong,
+    setContinueOnWrong,
+    testComplete,
+    intervals,
+    setFinalResults,
+    finalResults,
+    setSecondsTimer,
+    secondsTimer,
+    correctNotes,
+    wrongNotes,
+    sheetScale,
   };
 };
