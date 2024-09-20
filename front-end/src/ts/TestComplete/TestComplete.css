@@ -1,0 +1,45 @@
+.test-complete-container {
+  top: -60%;
+  width: 135%;
+  left: -17.5%;
+  position: relative;
+}
+
+.test-complete-data {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.treble-container {
+  display: flex;
+  align-items: center;
+}
+
+.bass-container {
+  display: flex;
+  align-items: center;
+}
+
+.test-complete-text {
+  position: absolute;
+  right: 0;
+  white-space: nowrap;
+}
+
+.tc-reset-button {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  top: 45px;
+}
+
+.tc-reset-button button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  transition: all 0s ease;
+  user-select: none;
+  transform: rotate(0deg);
+}
