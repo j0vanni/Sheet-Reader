@@ -390,44 +390,6 @@ export const useMainPageState = () => {
     }
   };
 
-  //OUTDATED
-  //too complex, not as free flowing as the current method
-  //we want to update so that every note before hand is a color
-  //the curr note is a different color
-  //and the notes after are the default color
-  // const noteHighlight = (
-  //   currNoteIndex: number,
-  //   notesPerMeasure: number,
-  //   currColor: string,
-  //   wrongColor: string,
-  //   correctColor: string,
-  //   correct: boolean
-  // ) => {
-  //   const style = document.createElement("style");
-  //   document.head.appendChild(style);
-  //   const sheet = style.sheet;
-  //   if (previousHighlightRef.current && correct) {
-  //     let { noteIndex, measureIndex } = previousHighlightRef.current;
-  //     sheet?.insertRule(
-  //       `.abcjs-n${noteIndex}.abcjs-m${measureIndex} { fill: ${correctColor}; }`,
-  //       sheet.cssRules.length
-  //     );
-  //   } else if (previousHighlightRef.current && !correct) {
-  //     let { noteIndex, measureIndex } = previousHighlightRef.current;
-  //     sheet?.insertRule(
-  //       `.abcjs-n${noteIndex}.abcjs-m${measureIndex} { fill: ${wrongColor}; }`,
-  //       sheet.cssRules.length
-  //     );
-  //   }
-  //   const noteIndex = currNoteIndex % notesPerMeasure;
-  //   const measureIndex = Math.floor(currNoteIndex / notesPerMeasure);
-  //   sheet?.insertRule(
-  //     `.abcjs-n${noteIndex}.abcjs-m${measureIndex} { fill: ${currColor}; }`,
-  //     sheet.cssRules.length
-  //   );
-  //   previousHighlightRef.current = { noteIndex, measureIndex };
-  // };
-
   const clearHighlightStyles = () => {
     const styleSheets = document.styleSheets;
     for (let i = 0; i < styleSheets.length; i++) {
