@@ -23,6 +23,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   height: 200px;
+  user-select: none;
 }
 
 .metronome-container {
@@ -35,4 +36,24 @@
   position: absolute;
   top: 100px;
   transition: all 1s ease;
+}
+
+.abcjs-v0 {
+  fill: gray;
+}
+
+.abcjs-staff-extra {
+  fill: white;
+}
+
+.abcjs-bar {
+  fill: white;
+}
+
+.seconds-timer-mainpage {
+  font-size: x-large;
+  position: absolute;
+  left: 50%;
+  top: -7.5%;
+  transform: translate(-50%, -50%);
 }
