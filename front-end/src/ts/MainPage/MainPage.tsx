@@ -5,6 +5,7 @@ import SheetMusic from "../SheetMusic/SheetMusic";
 import { useMainPageState } from "../Utils/MainPageUtils";
 import "./MainPage.css";
 import Metronome from "../Metronome/Metronome";
+import TestComplete from "../TestComplete/TestComplete";
 
 const MainPage: React.FC = () => {
   const {
@@ -12,8 +13,8 @@ const MainPage: React.FC = () => {
     setTreble,
     bass,
     setBass,
-    sharps,
-    setSharps,
+    sharp,
+    setSharp,
     flats,
     setFlats,
     seconds,
@@ -34,6 +35,17 @@ const MainPage: React.FC = () => {
     noteCorrectTextOpactiy,
     handlePianoKeyPress,
     handleResetPress,
+    testComplete,
+    intervals,
+    continueOnWrong,
+    setFinalResults,
+    finalResults,
+    setSecondsTimer,
+    secondsTimer,
+    correctNotes,
+    wrongNotes,
+    sheetScale,
+    setContinueOnWrong,
   } = useMainPageState();
 
   return (
@@ -44,8 +56,8 @@ const MainPage: React.FC = () => {
           setTreble={setTreble}
           bass={bass}
           setBass={setBass}
-          sharps={sharps}
-          setSharps={setSharps}
+          sharps={sharp}
+          setSharps={setSharp}
           flats={flats}
           setFlats={setFlats}
           seconds={seconds}
@@ -58,9 +70,13 @@ const MainPage: React.FC = () => {
           setMetronome={setMetronome}
           beatspermin={beatspermin}
           setBPM={setBPM}
+          continueOnWrong={continueOnWrong}
+          setContinueOnWrong={setContinueOnWrong}
         />
       </div>
+
       <div className="sm-container">
+        <p className="seconds-timer-mainpage">{secondsTimer}</p>
         <SheetMusic
           settings={{
             currentNote: currNote,
@@ -70,7 +86,7 @@ const MainPage: React.FC = () => {
             notation: trebleNotation,
             renderOptions: {
               add_classes: true,
-              scale: 1.5,
+              scale: sheetScale,
               paddingbottom: 1,
               paddingright: 1,
               paddingleft: 1,
@@ -88,7 +104,7 @@ const MainPage: React.FC = () => {
             notation: bassNotation,
             renderOptions: {
               add_classes: true,
-              scale: 1.5,
+              scale: sheetScale,
               paddingtop: 1,
               paddingright: 1,
               paddingleft: 1,
@@ -97,13 +113,6 @@ const MainPage: React.FC = () => {
             },
           }}
         />
-      </div>
-
-      <div
-        className="note-correct-text"
-        style={{ opacity: noteCorrectTextOpactiy }}
-      >
-        test
       </div>
       <div className="piano-container" tabIndex={1}>
         {metronome && (
@@ -115,10 +124,17 @@ const MainPage: React.FC = () => {
             />
           </div>
         )}
-        <Piano
-          onKeyPress={handlePianoKeyPress}
-          onResetPress={handleResetPress}
-        />
+        {testComplete ? (
+          <TestComplete
+            results={finalResults}
+            onResetPress={handleResetPress}
+          />
+        ) : (
+          <Piano
+            onKeyPress={handlePianoKeyPress}
+            onResetPress={handleResetPress}
+          />
+        )}
       </div>
     </div>
   );
