@@ -36,11 +36,11 @@ declare namespace SheetTypes {
 
   interface SheetSettings {
     clef: Clef;
-    scale: ScaleType;
-    timeSignature: TimeSignature;
+    scale?: ScaleType;
+    timeSignature?: TimeSignature;
     notation: string[];
     renderOptions?: RenderOptions;
-    currentNote: number;
+    currentNote?: number;
   }
 }
 
