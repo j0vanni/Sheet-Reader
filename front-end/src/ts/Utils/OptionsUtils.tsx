@@ -17,4 +17,6 @@ export type OptionsProps = {
   setMetronome: (value: boolean) => void;
   beatspermin: number;
   setBPM: (value: number) => void;
+  continueOnWrong: boolean;
+  setContinueOnWrong: (value: boolean) => void;
 };
