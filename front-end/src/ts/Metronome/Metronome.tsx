@@ -15,8 +15,6 @@ const Metronome: React.FC<MetronomeProps> = ({
     if (userStart && useMetronome) {
       const interval = setInterval(() => {
         setPendulumRotation((prev) => {
-          console.log(prev, direction);
-
           if (prev <= -75) {
             setDirection(1);
           } else if (prev >= 75) {
