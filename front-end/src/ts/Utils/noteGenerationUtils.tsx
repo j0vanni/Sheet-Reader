@@ -197,20 +197,39 @@ export const compareNotes = (
   note1: PianoKey | null,
   note2: PianoKey | null
 ): boolean => {
-  if (!note1 || !note2) {
+  //return false if either note is null, notes do not align with sharp/flat
+  if (
+    note1 === null ||
+    note2 === null ||
+    note1.sharp !== note2.sharp ||
+    note1.flat !== note2.flat
+  ) {
     return false;
   }
 
-  if (note1.sharp !== note2.sharp || note1.flat !== note2.flat) {
-    return false;
-  }
-
-  if (note1.global || note2.global) {
-  } else {
-    if (note1.octave !== note2.octave) {
+  //function to compare note arrays
+  const compareNoteArrays = (arr: Note[], arr2: Note[]) => {
+    if (arr.length !== arr2.length) {
       return false;
     }
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] !== arr2[i]) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  //if either note is global, compare note arrays
+  if (note1.global || note2.global) {
+    return compareNoteArrays(note1.note, note2.note);
   }
 
-  return true;
+  //otherwise, check if the octaves match
+  if (note1.octave !== note2.octave) {
+    return false;
+  }
+
+  //if the octaves match, compare note arrays
+  return compareNoteArrays(note1.note, note2.note);
 };
