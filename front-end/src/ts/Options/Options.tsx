@@ -20,7 +20,9 @@ const Options: React.FC<OptionsProps> = ({
   metronome,
   setMetronome,
   beatspermin,
-  setBPM
+  setBPM,
+  continueOnWrong,
+  setContinueOnWrong,
 }) => {
   return (
     <div className="op-container" tabIndex={-1}>
@@ -40,7 +42,7 @@ const Options: React.FC<OptionsProps> = ({
       </div>
       <p id="divide"></p>
       <div className="seconds-options-container">
-        <button onClick={() => setSeconds(15)} tabIndex={-1}>
+        <button onClick={() => setSeconds(5)} tabIndex={-1}>
           <p className={seconds === 15 ? "selected" : "unselected"}>
             15 seconds
           </p>
@@ -58,7 +60,8 @@ const Options: React.FC<OptionsProps> = ({
       </div>
       <p id="divide"></p>
       <div className="extra-options-container">
-        <button
+        {/* to be implemented with midi buttons later
+         <button
           onClick={() => {
             setSameLine(!sameLine);
             if (sameLine === false) {
@@ -69,6 +72,14 @@ const Options: React.FC<OptionsProps> = ({
           tabIndex={-1}
         >
           <p className={sameLine ? "selected" : "unselected"}>Two Hands</p>
+        </button> */}
+        <button
+          onClick={() => setContinueOnWrong(!continueOnWrong)}
+          tabIndex={-1}
+        >
+          <p className={continueOnWrong ? "selected" : "unselected"}>
+            Continue on Wrong
+          </p>
         </button>
         <button onClick={() => setTempo(!tempo)} tabIndex={-1}>
           <p className={tempo ? "selected" : "unselected"}>Match Tempo</p>
