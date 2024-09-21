@@ -116,7 +116,6 @@ export const useMainPageState = () => {
       setCurrNotePress(0);
 
       const initialHighlightArray = Array(highlightArray.length).fill("gray");
-      console.log(fullHightlightArray);
 
       setHighlightArray(initialHighlightArray);
 
@@ -164,6 +163,10 @@ export const useMainPageState = () => {
     seconds,
   ]);
 
+  async function getHighlightArray() {
+    return highlightArray;
+  }
+
   //timer for the test, will count down from the seconds given, will stop when the seconds reach 0
   useEffect(() => {
     if (userStart) {
@@ -171,34 +174,50 @@ export const useMainPageState = () => {
         setSecondsTimer((prev) => {
           if (prev > 0) {
             return prev - 1;
-          } else {
-            //when the timer reaches 0, we stop the test
-            setTestComplete(true);
-            setFinalResults({
-              treble,
-              bass,
-              sharp,
-              flats,
-              seconds,
-              tempo,
-              sameLine,
-              bpms,
-              beatspermin,
-              continueOnWrong,
-              fullTrebleNotation,
-              fullBassNotation,
-              fullHightlightArray,
-            });
-            clearInterval(intervalId);
-            setSheetScale(0.8);
-            return 0;
           }
+          return 0;
         });
       }, 1000);
-
       return () => clearInterval(intervalId);
     }
   }, [userStart]);
+
+  useEffect(() => {
+    if (secondsTimer === 0 && userStart) {
+      const updatedFullTrebleNotation = [
+        ...fullTrebleNotation,
+        ...trebleNotation,
+      ];
+      const updatedFullBassNotation = [...fullBassNotation, ...bassNotation];
+      const updatedFullHighlightArray = [
+        ...fullHightlightArray,
+        ...highlightArray,
+      ];
+
+      setFullTrebleNotation(updatedFullTrebleNotation);
+      setFullBassNotation(updatedFullBassNotation);
+      setFullHighlightArray(updatedFullHighlightArray);
+
+      setFinalResults({
+        treble,
+        bass,
+        sharp,
+        flats,
+        seconds,
+        tempo,
+        sameLine,
+        bpms,
+        beatspermin,
+        continueOnWrong,
+        fullTrebleNotation: updatedFullTrebleNotation,
+        fullBassNotation: updatedFullBassNotation,
+        fullHightlightArray: updatedFullHighlightArray,
+      });
+
+      setTestComplete(true);
+      setSheetScale(0.8);
+    }
+  }, [secondsTimer]);
 
   const generateNotationsForClef = (clef: string) => {
     return generateNotes(
