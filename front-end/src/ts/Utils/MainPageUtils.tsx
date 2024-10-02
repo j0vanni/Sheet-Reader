@@ -73,7 +73,6 @@ export const useMainPageState = () => {
   } | null>(null);
 
   useEffect(() => {
-    // console.log(testComplete);
     //if the notations are empty, generate new ones (when the site is first loaded)
     if (
       (trebleNotation.length === 0 && bassNotation.length === 0) ||
@@ -162,10 +161,6 @@ export const useMainPageState = () => {
     bassNotation,
     seconds,
   ]);
-
-  async function getHighlightArray() {
-    return highlightArray;
-  }
 
   //timer for the test, will count down from the seconds given, will stop when the seconds reach 0
   useEffect(() => {
@@ -279,6 +274,7 @@ export const useMainPageState = () => {
     setFullTrebleNotation([]);
     setFullBassNotation([]);
     setFullHighlightArray([]);
+    setBPMS([]);
   };
 
   const updateNotations = () => {
@@ -350,6 +346,7 @@ export const useMainPageState = () => {
     }
     //gets the tempo between the current note and the last note
     tempoCheck();
+
     //converts the notations (arrays) to Notes
     const currTreble = notationToKey(trebleNotation[currNote]);
     const currBass = notationToKey(bassNotation[currNote]);
@@ -364,20 +361,26 @@ export const useMainPageState = () => {
     //it will continue
     //needs to be adjusted for if the two handed option is on and
     //need to add if user wants to pause when wrong
-    if (!sameLine && (isTrebleCorrect || isBassCorrect)) {
+    if (
+      (!sameLine && (isTrebleCorrect || isBassCorrect)) ||
+      (sameLine && isTrebleCorrect && isBassCorrect)
+    ) {
       //sets the last note to correct
       setIsLastNoteCorrect(true);
       newHighlightArray[currNotePress + 1] = "white";
-      newHighlightArray[currNotePress] = "green";
+
+      if (
+        tempo &&
+        bpms.length > 1 &&
+        Math.abs(Number(bpms[bpms.length - 1] - beatspermin)) > bpmLeeway
+      ) {
+        newHighlightArray[currNotePress] = "yellow";
+      } else {
+        newHighlightArray[currNotePress] = "green";
+      }
       //moves the curr note forward, this one is with line breaks included
       setCurrNote((prevNote) => prevNote + 1);
       //move the curr note press forward, without line breaks (important)
-      setCurrNotePress((prevNotePress) => prevNotePress + 1);
-    } else if (sameLine && isTrebleCorrect && isBassCorrect) {
-      setIsLastNoteCorrect(true);
-      newHighlightArray[currNotePress + 1] = "white";
-      newHighlightArray[currNotePress] = "green";
-      setCurrNote((prevNote) => prevNote + 1);
       setCurrNotePress((prevNotePress) => prevNotePress + 1);
     } else {
       setIsLastNoteCorrect(false);
