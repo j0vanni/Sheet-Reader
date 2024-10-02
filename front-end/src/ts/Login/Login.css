@@ -1,0 +1,51 @@
+.user-icon {
+  font-size: 2rem;
+  width: 2rem;
+}
+
+.login-container {
+  position: absolute;
+  right: -30px;
+  z-index: 2;
+}
+
+.custom-textfield .MuiOutlinedInput-root {
+  height: 46px;
+  width: 12rem;
+}
+
+.custom-textfield .MuiInputLabel-root {
+  color: #686868;
+}
+
+.custom-textfield .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: #686868;
+}
+
+.custom-textfield
+  .MuiOutlinedInput-root.Mui-focused
+  .MuiOutlinedInput-notchedOutline {
+  border-color: white;
+}
+
+.custom-textfield .MuiInputLabel-root.Mui-focused {
+  color: white;
+}
+
+.custom-textfield:hover .MuiInputLabel-root {
+  color: #898989;
+}
+
+.custom-textfield:hover
+  .MuiOutlinedInput-root
+  .MuiOutlinedInput-notchedOutline {
+  border-color: #898989;
+}
+
+.custom-textfield .MuiInputBase-input {
+  color: #999999;
+}
+
+.custom-textfield .MuiInputBase-input:focus {
+  color: white;
+}
