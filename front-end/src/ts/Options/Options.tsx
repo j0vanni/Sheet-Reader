@@ -42,7 +42,7 @@ const Options: React.FC<OptionsProps> = ({
       </div>
       <p id="divide"></p>
       <div className="seconds-options-container">
-        <button onClick={() => setSeconds(5)} tabIndex={-1}>
+        <button onClick={() => setSeconds(15)} tabIndex={-1}>
           <p className={seconds === 15 ? "selected" : "unselected"}>
             15 seconds
           </p>
@@ -78,15 +78,32 @@ const Options: React.FC<OptionsProps> = ({
           tabIndex={-1}
         >
           <p className={continueOnWrong ? "selected" : "unselected"}>
-            Continue on Wrong
+            Cont. on Fail
           </p>
         </button>
         <button onClick={() => setTempo(!tempo)} tabIndex={-1}>
           <p className={tempo ? "selected" : "unselected"}>Match Tempo</p>
         </button>
+
+        {tempo && (
+
+        <div className="bpm-container">
+          <label htmlFor="bpm-input">BPM:</label>
+          <input
+            type="number"
+            id="bpm-input"
+            value={beatspermin}
+            onChange={(e) => setBPM(Number(e.target.value))}
+            min="40"
+            max="240"
+            tabIndex={-1}
+          />
+        </div>)}
+        
+        {/*add this later, should work with sound and better positioning
         <button onClick={() => setMetronome(!metronome)} tabIndex={-1}>
           <p className={metronome ? "selected" : "unselected"}>Use Metronome</p>
-        </button>
+        </button> */}
       </div>
     </div>
   );
