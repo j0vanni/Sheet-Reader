@@ -56,4 +56,11 @@
   left: 50%;
   top: -7.5%;
   transform: translate(-50%, -50%);
+  user-select: none;
+}
+
+.user-login-container {
+  position: absolute;
+  right: 100px;
+  top: 7%;
 }

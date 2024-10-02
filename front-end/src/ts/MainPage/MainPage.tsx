@@ -6,6 +6,7 @@ import { useMainPageState } from "../Utils/MainPageUtils";
 import "./MainPage.css";
 import Metronome from "../Metronome/Metronome";
 import TestComplete from "../TestComplete/TestComplete";
+import Login from "../Login/Login";
 
 const MainPage: React.FC = () => {
   const {
@@ -73,6 +74,10 @@ const MainPage: React.FC = () => {
           continueOnWrong={continueOnWrong}
           setContinueOnWrong={setContinueOnWrong}
         />
+      </div>
+
+      <div className="user-login-container">
+        <Login/>
       </div>
 
       <div className="sm-container">
