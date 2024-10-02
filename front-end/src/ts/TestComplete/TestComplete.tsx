@@ -18,14 +18,14 @@ const TestComplete: React.FC<TestCompleteProps> = (props) => {
   const tempo = results.tempo;
   const sameLine = results.sameLine;
   const bpms = results.bpms;
-  const targetBPM = results.bpmTarget;
+  const beatspermin = results.beatspermin;
   const continueOnWrong = results.continueOnWrong;
   const avgBPM = results.bpms.slice(1).reduce((a, b) => (a + b) / 2, 0);
   const fullTrebleNotation = results.fullTrebleNotation;
   const fullBassNotation = results.fullBassNotation;
   const fullHighlightArray = results.fullHightlightArray;
   const correctNotes = fullHighlightArray.filter((x) => x === "green").length;
-  console.log(fullHighlightArray, correctNotes);
+  const wrongNotes = fullHighlightArray.filter((x) => x === "red").length;
 
   const newTempo = tempo ? "true" : "false";
   const newLine = sameLine ? "true" : "false";
@@ -38,6 +38,8 @@ const TestComplete: React.FC<TestCompleteProps> = (props) => {
     setTimeout(() => setIsRotated(false), 1000);
     onResetPress();
   };
+
+  //show bpm target
 
   return (
     <div className="test-complete-container">
@@ -143,9 +145,17 @@ const TestComplete: React.FC<TestCompleteProps> = (props) => {
           <p style={{ fontWeight: "bold", lineHeight: 0 }}>
             {avgBPM.toFixed(0)} bpm on average
           </p>
-          <p style={{ fontWeight: "bold" }}>wrong notes: {}</p>
-        </div>
-        <div style={{ height: 30 }}>
+          <p style={{ fontWeight: "bold" }}>wrong notes: {wrongNotes}</p>
+        </div>{" "}
+        <div
+          style={{
+            display: "flex",
+            height: 30,
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           {newContinue ? (
             <p style={{ fontWeight: "bold", lineHeight: 0 }}>
               continue on failure enabled
@@ -154,6 +164,9 @@ const TestComplete: React.FC<TestCompleteProps> = (props) => {
             <p style={{ fontWeight: "bold", lineHeight: 0 }}>
               continue on failure disabled
             </p>
+          )}
+          {tempo && (
+            <p style={{ fontWeight: "bold" }}>targeted bpm: {beatspermin}</p>
           )}
         </div>
         <div style={{ height: 30 }}>
