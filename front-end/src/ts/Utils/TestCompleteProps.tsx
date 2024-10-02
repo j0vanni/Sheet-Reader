@@ -8,7 +8,7 @@ export interface TestCompleteProps {
     tempo: boolean;
     sameLine: boolean;
     bpms: number[];
-    bpmTarget: number;
+    beatspermin: number;
     continueOnWrong: boolean;
     fullTrebleNotation: string[];
     fullBassNotation: string[];
