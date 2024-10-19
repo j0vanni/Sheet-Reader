@@ -204,6 +204,10 @@ export const compareNotes = (
     note1.sharp !== note2.sharp ||
     note1.flat !== note2.flat
   ) {
+    console.log(note1, note2)
+    console.log(note1?.sharp, note2?.sharp)
+    console.log(note1?.flat, note2?.flat)
+    
     return false;
   }
 

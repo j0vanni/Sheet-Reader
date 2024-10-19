@@ -13,6 +13,10 @@ export interface TestCompleteProps {
     fullTrebleNotation: string[];
     fullBassNotation: string[];
     fullHightlightArray: string[];
+    flatsharpPercentage: number;
+    lineBreakLength: number;
+    noteGenerationLength: number;
+    bpmLeeway: number;
   } | null;
   onResetPress: () => void;
 }

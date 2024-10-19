@@ -31,6 +31,10 @@ const TestComplete: React.FC<TestCompleteProps> = (props) => {
   const newLine = sameLine ? "true" : "false";
   const newContinue = continueOnWrong ? "true" : "false";
 
+  const lineBreakLength = results.lineBreakLength;
+  const noteGenerationLength = results.noteGenerationLength;
+  const bpmLeeway = results.bpmLeeway;
+
   const [isRotated, setIsRotated] = useState(false);
 
   const handleReset = () => {

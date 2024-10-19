@@ -49,6 +49,9 @@ export const useMainPageState = () => {
     fullTrebleNotation: string[];
     fullBassNotation: string[];
     fullHightlightArray: string[];
+    lineBreakLength: number;
+    noteGenerationLength: number;
+    bpmLeeway: number;
   } | null>(null);
   const [time, setTime] = useState(0);
   const [correctNotes, setCorrectNotes] = useState<number>(0);
@@ -61,7 +64,8 @@ export const useMainPageState = () => {
   const [bassNotation, setBassNotation] = useState([""]);
   const [highlightArray, setHighlightArray] = useState<string[]>(["white"]);
   //note generation, to be seen what can be changed/adjusted
-  const flatsharpPercentage = 0.2; //if flats/sharps are enabled, 20% will be flats/sharps
+  // const flatsharpPercentage = 0.2; //if flats/sharps are enabled, 20% will be flats/sharps
+  const flatsharpPercentage = .2; //if flats/sharps are enabled, 20% will be flats/sharps
   const lineBreakLength = 4; //after 4 notes, a line break will be made
   const noteGenerationLength = 4 * lineBreakLength; //length is 12 notes, good size normally
   const targetInterval = 60000 / beatspermin; //allows the intervals to compare with the bpm
@@ -207,6 +211,9 @@ export const useMainPageState = () => {
         fullTrebleNotation: updatedFullTrebleNotation,
         fullBassNotation: updatedFullBassNotation,
         fullHightlightArray: updatedFullHighlightArray,
+        lineBreakLength,
+        noteGenerationLength,
+        bpmLeeway,
       });
 
       setTestComplete(true);
@@ -350,6 +357,7 @@ export const useMainPageState = () => {
     //converts the notations (arrays) to Notes
     const currTreble = notationToKey(trebleNotation[currNote]);
     const currBass = notationToKey(bassNotation[currNote]);
+
 
     //compares the Notes to see if they are correct, returns true or false
     const isTrebleCorrect = compareNotes(currTreble, note);
